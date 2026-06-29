@@ -31,30 +31,34 @@ const pageDescription = "Personal website of 丁焕.";
 
   <!-- Blog sections -->
   <section class="blog-grid">
-    <GlassCard interactive>
-      <h3 style="margin: 0 0 var(--space-sm); font-size: var(--text-lg);">
-        <span class="glass-pill tech" style="margin-right: var(--space-sm);">技术</span>
-        Tech Blog
-      </h3>
-      <p style="margin: 0; color: var(--color-text-secondary); font-size: var(--text-sm);">
-        Notes on embedded systems, C/C++, Linux, ROS2, and projects I'm working on.
-      </p>
-      <div style="margin-top: var(--space-md);">
-        <a href="/tech" style="font-size: var(--text-sm); font-weight: 500;">Browse posts →</a>
-      </div>
-    </GlassCard>
+    <a href="/tech" class="card-link">
+      <GlassCard interactive>
+        <h3 style="margin: 0 0 var(--space-sm); font-size: var(--text-lg);">
+          <span class="glass-pill tech" style="margin-right: var(--space-sm);">技术</span>
+          Tech Blog
+        </h3>
+        <p style="margin: 0; color: var(--color-text-secondary); font-size: var(--text-sm);">
+          Notes on embedded systems, C/C++, Linux, ROS2, and projects I'm working on.
+        </p>
+        <div style="margin-top: auto; padding-top: var(--space-md);">
+          <span style="font-size: var(--text-sm); font-weight: 500; color: var(--color-accent);">Browse posts →</span>
+        </div>
+      </GlassCard>
+    </a>
 
-    <GlassCard interactive>
-      <h3 style="margin: 0 0 var(--space-sm); font-size: var(--text-lg);">
-        <span class="glass-pill life" style="margin-right: var(--space-sm);">生活</span>
-        Life Essays
-      </h3>
-      <p style="margin: 0; color: var(--color-text-secondary); font-size: var(--text-sm);">
-        Personal reflections, photography, and everyday stories.
-      </p>
-      <div style="margin-top: var(--space-md);">
-        <a href="/life" style="font-size: var(--text-sm); font-weight: 500;">Browse essays →</a>
-      </div>
-    </GlassCard>
+    <a href="/life" class="card-link">
+      <GlassCard interactive>
+        <h3 style="margin: 0 0 var(--space-sm); font-size: var(--text-lg);">
+          <span class="glass-pill life" style="margin-right: var(--space-sm);">生活</span>
+          Life Essays
+        </h3>
+        <p style="margin: 0; color: var(--color-text-secondary); font-size: var(--text-sm);">
+          Personal reflections, photography, and everyday stories.
+        </p>
+        <div style="margin-top: auto; padding-top: var(--space-md);">
+          <span style="font-size: var(--text-sm); font-weight: 500; color: var(--color-accent);">Browse essays →</span>
+        </div>
+      </GlassCard>
+    </a>
   </section>
 </BaseLayout>

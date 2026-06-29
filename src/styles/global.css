@@ -564,6 +564,22 @@ a.glass-pill:hover {
   margin-bottom: var(--space-3xl);
 }
 
+.card-link {
+  display: flex;
+  text-decoration: none;
+  color: inherit;
+}
+
+.card-link > * {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-link:hover {
+  color: inherit;
+}
+
 /* ============================================================
    BLOG LISTING
    ============================================================ */
