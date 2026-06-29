@@ -4,35 +4,41 @@
 const menu = document.querySelector('.menu');
 const navLinks = document.getElementById('main-menu');
 
+function closeMenu() {
+  menu?.setAttribute('aria-expanded', 'false');
+  navLinks?.classList.remove('is-expanded');
+  document.body.style.overflow = '';
+}
+
+function openMenu() {
+  menu?.setAttribute('aria-expanded', 'true');
+  navLinks?.classList.add('is-expanded');
+  document.body.style.overflow = 'hidden';
+}
+
 menu?.addEventListener('click', () => {
   const isExpanded = menu.getAttribute('aria-expanded') === 'true';
-  const nextState = !isExpanded;
-
-  // Update button state
-  menu.setAttribute('aria-expanded', String(nextState));
-
-  // Toggle visibility class on the nav-links sibling
-  if (navLinks) {
-    navLinks.classList.toggle('is-expanded', nextState);
+  if (isExpanded) {
+    closeMenu();
+  } else {
+    openMenu();
   }
 });
 
-// Close menu when clicking outside (better UX)
+// Close menu when clicking outside
 document.addEventListener('click', (event) => {
-  if (!navLinks || navLinks.classList.contains('is-expanded') === false) return;
+  if (!navLinks || !navLinks.classList.contains('is-expanded')) return;
 
   const target = event.target;
   if (target instanceof Node && !menu?.contains(target) && !navLinks.contains(target)) {
-    menu?.setAttribute('aria-expanded', 'false');
-    navLinks.classList.remove('is-expanded');
+    closeMenu();
   }
 });
 
 // Close menu on Escape key
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && navLinks?.classList.contains('is-expanded')) {
-    menu?.setAttribute('aria-expanded', 'false');
-    navLinks.classList.remove('is-expanded');
+    closeMenu();
     menu?.focus();
   }
 });

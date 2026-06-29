@@ -832,11 +832,11 @@ article pre code {
 
   .nav-links {
     display: none;
-    position: fixed;
-    top: var(--header-height);
+    position: absolute;
+    top: 100%;
     left: 0;
     right: 0;
-    bottom: 0;
+    height: calc(100dvh - var(--header-height));
     flex-direction: column;
     align-items: stretch;
     background: rgba(245, 245, 247, 0.97);
@@ -1008,7 +1008,7 @@ article pre code {
   .glass-button,
   .glass-pill,
   .glass-nav,
-  header nav,
+  .site-header,
   .nav-links {
     --glass-bg: rgba(255, 255, 255, 0.95);
     --glass-bg-strong: rgba(255, 255, 255, 1);

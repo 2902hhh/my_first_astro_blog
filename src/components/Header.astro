@@ -16,6 +16,10 @@ import Navigation from './Navigation.astro';
     top: 0;
     z-index: 100;
     width: 100%;
+    background: rgba(245, 245, 247, 0.8);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   }
 
   .site-header nav {
@@ -26,9 +30,5 @@ import Navigation from './Navigation.astro';
     max-width: var(--content-width);
     margin: 0 auto;
     padding: 0;
-    background: rgba(245, 245, 247, 0.8);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   }
 </style>
