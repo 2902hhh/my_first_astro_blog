@@ -1,0 +1,264 @@
+---
+// GlassFilter.astro — Physics-inspired SVG liquid glass filters
+// Rendered once per page in BaseLayout. Provides filter IDs for CSS.
+// Based on Apple's Liquid Glass: squircle dome surface + Snell's law refraction.
+---
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  style="display:none"
+  aria-hidden="true"
+>
+  <defs>
+    <!-- ============================================================
+         FILTER 1: glass-refraction
+         Subtle glass refraction for panels and cards.
+         Uses fractal noise as displacement source to simulate
+         the micro-surface of glass, with edge-weighted distortion
+         that approximates the squircle dome profile.
+         ============================================================ -->
+    <filter
+      id="glass-refraction"
+      x="-20%"
+      y="-20%"
+      width="140%"
+      height="140%"
+      color-interpolation-filters="sRGB"
+    >
+      <!-- Generate organic micro-texture (simulates glass surface irregularity) -->
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.6"
+        numOctaves="4"
+        seed="42"
+        result="noise"
+      />
+
+      <!-- Smooth the noise for a more organic feel -->
+      <feGaussianBlur
+        in="noise"
+        stdDeviation="1.5"
+        result="smooth-noise"
+      />
+
+      <!-- Create edge-weighted displacement:
+           Combine smooth noise with a subtle radial gradient
+           to concentrate distortion at edges (squircle dome behavior) -->
+      <feComponentTransfer
+        in="smooth-noise"
+        result="displacement-map"
+      >
+        <!-- Center values around 128 (no displacement) -->
+        <feFuncR type="linear" slope="6" intercept="-1.5" />
+        <feFuncG type="linear" slope="6" intercept="-1.5" />
+        <feFuncB type="linear" slope="0" intercept="0.5" />
+        <feFuncA type="linear" slope="0" intercept="1" />
+      </feComponentTransfer>
+
+      <!-- Apply the displacement to the source graphic -->
+      <feDisplacementMap
+        in="SourceGraphic"
+        in2="displacement-map"
+        scale="4"
+        xChannelSelector="R"
+        yChannelSelector="G"
+        result="refracted"
+      />
+    </filter>
+
+    <!-- ============================================================
+         FILTER 2: glass-button
+         Stronger refraction for interactive buttons.
+         Higher displacement scale for more dramatic glass feel.
+         ============================================================ -->
+    <filter
+      id="glass-button"
+      x="-25%"
+      y="-25%"
+      width="150%"
+      height="150%"
+      color-interpolation-filters="sRGB"
+    >
+      <!-- Rich multi-octave noise for complex refraction -->
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.5"
+        numOctaves="5"
+        seed="17"
+        result="noise"
+      />
+
+      <!-- Gentle blur to smooth the refraction texture -->
+      <feGaussianBlur
+        in="noise"
+        stdDeviation="1.2"
+        result="smooth-noise"
+      />
+
+      <!-- Map noise to displacement range centered at 0 (no displacement) -->
+      <feComponentTransfer
+        in="smooth-noise"
+        result="displacement-map"
+      >
+        <feFuncR type="linear" slope="10" intercept="-3" />
+        <feFuncG type="linear" slope="10" intercept="-3" />
+        <feFuncB type="linear" slope="0" intercept="0.5" />
+        <feFuncA type="linear" slope="0" intercept="1" />
+      </feComponentTransfer>
+
+      <!-- Apply displacement -->
+      <feDisplacementMap
+        in="SourceGraphic"
+        in2="displacement-map"
+        scale="8"
+        xChannelSelector="R"
+        yChannelSelector="G"
+        result="refracted"
+      />
+    </filter>
+
+    <!-- ============================================================
+         FILTER 3: glass-specular
+         Rim light effect — simulates the bright edge glow of
+         light catching the curved edge of the glass surface.
+         Uses feSpecularLighting with a point light source.
+         ============================================================ -->
+    <filter
+      id="glass-specular"
+      x="-10%"
+      y="-10%"
+      width="120%"
+      height="120%"
+      color-interpolation-filters="sRGB"
+    >
+      <!-- Generate a surface bump map from noise -->
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.4"
+        numOctaves="3"
+        seed="89"
+        result="bump-noise"
+      />
+
+      <!-- Blur for smooth surface -->
+      <feGaussianBlur
+        in="bump-noise"
+        stdDeviation="2"
+        result="bump"
+      />
+
+      <!-- Specular lighting — creates the reflective rim highlight -->
+      <feSpecularLighting
+        in="bump"
+        surfaceScale="3"
+        specularConstant="0.6"
+        specularExponent="25"
+        lighting-color="#ffffff"
+        result="specular"
+      >
+        <fePointLight x="50%" y="30%" z="150" />
+      </feSpecularLighting>
+
+      <!-- Compose specular over the original -->
+      <feComposite
+        in="specular"
+        in2="SourceGraphic"
+        operator="in"
+        result="specular-masked"
+      />
+
+      <!-- Blend specular highlight on top of original content -->
+      <feBlend
+        in="SourceGraphic"
+        in2="specular-masked"
+        mode="screen"
+      />
+    </filter>
+
+    <!-- ============================================================
+         FILTER 4: glass-specular-only
+         Just the specular highlight, for layering over existing
+         glass surfaces via CSS mix-blend-mode or opacity.
+         ============================================================ -->
+    <filter
+      id="glass-specular-only"
+      x="-5%"
+      y="-5%"
+      width="110%"
+      height="110%"
+      color-interpolation-filters="sRGB"
+    >
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.35"
+        numOctaves="3"
+        seed="73"
+        result="bump-noise"
+      />
+
+      <feGaussianBlur
+        in="bump-noise"
+        stdDeviation="2.5"
+        result="bump"
+      />
+
+      <feSpecularLighting
+        in="bump"
+        surfaceScale="4"
+        specularConstant="0.5"
+        specularExponent="30"
+        lighting-color="#ffffff"
+      >
+        <fePointLight x="50%" y="25%" z="200" />
+      </feSpecularLighting>
+    </filter>
+
+    <!-- ============================================================
+         FILTER 5: glass-nav-dropdown
+         Stronger, more dramatic refraction for navigation dropdowns
+         that bend background content (the kube.io menu effect).
+         Uses higher displacement scale and edge-focused distortion.
+         ============================================================ -->
+    <filter
+      id="glass-nav-dropdown"
+      x="-30%"
+      y="-30%"
+      width="160%"
+      height="160%"
+      color-interpolation-filters="sRGB"
+    >
+      <!-- Complex noise for rich refractive surface -->
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.45"
+        numOctaves="5"
+        seed="55"
+        result="noise"
+      />
+
+      <feGaussianBlur
+        in="noise"
+        stdDeviation="1"
+        result="smooth-noise"
+      />
+
+      <!-- Higher amplitude displacement for dramatic bending -->
+      <feComponentTransfer
+        in="smooth-noise"
+        result="displacement-map"
+      >
+        <feFuncR type="linear" slope="14" intercept="-4" />
+        <feFuncG type="linear" slope="14" intercept="-4" />
+        <feFuncB type="linear" slope="0" intercept="0.5" />
+        <feFuncA type="linear" slope="0" intercept="1" />
+      </feComponentTransfer>
+
+      <feDisplacementMap
+        in="SourceGraphic"
+        in2="displacement-map"
+        scale="18"
+        xChannelSelector="R"
+        yChannelSelector="G"
+      />
+    </filter>
+  </defs>
+</svg>

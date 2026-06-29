@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+
+export async function getStaticPaths() {
+  const allPosts = Object.values(
+    import.meta.glob('../posts/*.md', { eager: true })
+  );
+
+  const lifePosts = (allPosts as any[])
+    .filter((post: any) => post.frontmatter.category === 'life')
+    .sort((a: any, b: any) => {
+      if (a.frontmatter.pinned && !b.frontmatter.pinned) return -1;
+      if (!a.frontmatter.pinned && b.frontmatter.pinned) return 1;
+      return new Date(b.frontmatter.pubDate).getTime() - new Date(a.frontmatter.pubDate).getTime();
+    });
+
+  const POSTS_PER_PAGE = 4;
+  const totalPages = Math.max(1, Math.ceil(lifePosts.length / POSTS_PER_PAGE));
+
+  return Array.from({ length: totalPages }, (_, i) => {
+    const pageNum = i + 1;
+    return {
+      params: { page: pageNum === 1 ? undefined : String(pageNum) },
+      props: {
+        posts: lifePosts.slice(i * POSTS_PER_PAGE, (i + 1) * POSTS_PER_PAGE),
+        currentPage: pageNum,
+        totalPages,
+      },
+    };
+  });
+}
+
+const { posts, currentPage, totalPages } = Astro.props;
+const pageTitle = '生活随笔';
+const pageDescription = 'Personal essays by 丁焕 — reflections, stories, and everyday moments.';
+---
+
+<BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
+  <div class="page-content">
+    <div class="page-header">
+      <h1>生活随笔</h1>
+      <p>Personal reflections, stories, and everyday moments.</p>
+    </div>
+
+    {
+      posts.length > 0 ? (
+        <ul class="post-list">
+          {posts.map((post: any) => (
+            <li class="post-list-item">
+              <PostCard
+                title={post.frontmatter.title}
+                url={post.url}
+                date={post.frontmatter.pubDate.toString().slice(0, 10)}
+                description={post.frontmatter.description}
+                author={post.frontmatter.author}
+                tags={post.frontmatter.tags || []}
+                category="life"
+                pinned={post.frontmatter.pinned}
+              />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div class="empty-state glass-card">
+          <div class="empty-state-icon">🌿</div>
+          <p class="empty-state-text">还没有随笔，敬请期待。</p>
+        </div>
+      )
+    }
+
+    {totalPages > 1 && (
+      <nav class="pagination" aria-label="Page navigation">
+        {currentPage > 1 ? (
+          <a href={currentPage === 2 ? '/life' : `/life/${currentPage - 1}`} class="glass-button">
+            上一页
+          </a>
+        ) : (
+          <span class="glass-button" style="opacity: 0.4; pointer-events: none;">← 上一页</span>
+        )}
+
+        <span class="pagination-info">
+          {currentPage} / {totalPages}
+        </span>
+
+        {currentPage < totalPages ? (
+          <a href={`/life/${currentPage + 1}`} class="glass-button">
+            下一页
+          </a>
+        ) : (
+          <span class="glass-button" style="opacity: 0.4; pointer-events: none;">下一页 →</span>
+        )}
+      </nav>
+    )}
+  </div>
+</BaseLayout>

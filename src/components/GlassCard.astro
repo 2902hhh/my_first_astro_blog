@@ -1,0 +1,32 @@
+---
+// GlassCard.astro — Liquid glass card surface
+// 5-layer glass stack wrapper for content.
+//
+// Props:
+//   interactive - boolean: enable hover lift + refraction intensify (default: false)
+//   padding     - string: override default padding (default: var(--space-lg))
+//   class       - additional CSS classes
+//   as          - HTML element tag (default: "div")
+
+interface Props {
+  interactive?: boolean;
+  padding?: string;
+  class?: string;
+  as?: string;
+}
+
+const {
+  interactive = false,
+  padding,
+  class: extraClass = '',
+  as: Tag = 'div',
+} = Astro.props;
+
+const interactiveClass = interactive ? ' interactive' : '';
+const tagClass = `glass-card${interactiveClass} ${extraClass}`.trim();
+const style = padding ? `padding: ${padding};` : '';
+---
+
+<Tag class={tagClass} style={style}>
+  <slot />
+</Tag>

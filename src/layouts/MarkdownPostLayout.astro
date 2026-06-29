@@ -1,13 +1,86 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import TagPill from '../components/TagPill.astro';
+
+interface Props {
+  frontmatter: {
+    title: string;
+    pubDate: Date;
+    author: string;
+    description?: string;
+    image?: {
+      url: string;
+      alt: string;
+    };
+    tags?: string[];
+    category?: 'tech' | 'life';
+    layout?: string;
+  };
+}
+
 const { frontmatter } = Astro.props;
+
+// Format date as YYYY-MM-DD
+const dateStr = frontmatter.pubDate instanceof Date
+  ? frontmatter.pubDate.toISOString().slice(0, 10)
+  : String(frontmatter.pubDate).slice(0, 10);
+
+const category = frontmatter.category || 'tech';
+const categoryLabel = category === 'tech' ? '技术博客' : '生活随笔';
 ---
 
-<BaseLayout pageTitle={frontmatter.title}>
+<BaseLayout
+  pageTitle={frontmatter.title}
+  pageDescription={frontmatter.description || `A post by ${frontmatter.author}`}
+>
+  <article class="page-content">
+    <!-- Post metadata header -->
+    <header class="page-header">
+      <!-- Category badge -->
+      <div style="margin-bottom: var(--space-md);">
+        <a href={`/${category}`} class={`glass-pill ${category}`}>
+          {categoryLabel}
+        </a>
+      </div>
 
+      <h1>{frontmatter.title}</h1>
 
-<p>Published on: {frontmatter.pubDate.toString().slice(0,10)}</p>
-<p>Written by {frontmatter.author}</p>
-<slot />
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm); color: var(--color-text-secondary); font-size: var(--text-sm); margin-top: var(--space-sm);">
+        <time datetime={dateStr}>{dateStr}</time>
+        <span aria-hidden="true">·</span>
+        <span>{frontmatter.author}</span>
+      </div>
+    </header>
+
+    <!-- Hero image (if present in frontmatter) -->
+    {
+      frontmatter.image && (
+        <img
+          src={frontmatter.image.url}
+          alt={frontmatter.image.alt}
+          style="width: 100%; max-height: 400px; object-fit: cover; border-radius: var(--glass-radius); margin-bottom: var(--space-2xl);"
+          loading="lazy"
+        />
+      )
+    }
+
+    <!-- Article body -->
+    <div class="article-body">
+      <slot />
+    </div>
+
+    <!-- Tags footer -->
+    {
+      frontmatter.tags && frontmatter.tags.length > 0 && (
+        <footer style="margin-top: var(--space-3xl); padding-top: var(--space-xl); border-top: 1px solid var(--color-separator);">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm);">
+            <span style="color: var(--color-text-tertiary); font-size: var(--text-sm);">Tags:</span>
+            {frontmatter.tags.map((tag: string) => (
+              <TagPill tag={tag} href={`/tags/${tag}`} />
+            ))}
+          </div>
+        </footer>
+      )
+    }
+  </article>
 </BaseLayout>
-

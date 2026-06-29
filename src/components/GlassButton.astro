@@ -1,0 +1,52 @@
+---
+// GlassButton.astro — Liquid glass button component
+// 5-layer glass stack: bg → displacement → fill → specular → content
+//
+// Props:
+//   href      - URL (renders as <a>, omit for <button>)
+//   variant   - "primary" | "secondary" | "ghost" (default: "secondary")
+//   size      - "sm" | "md" | "lg" (default: "md")
+//   refractive - boolean: use Chrome-only SVG refraction (default: false, subtle)
+//   class     - additional CSS classes
+
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  refractive?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  variant = 'secondary',
+  size = 'md',
+  refractive = false,
+  class: extraClass = '',
+} = Astro.props;
+
+const Tag = href ? 'a' : 'button';
+
+const variantClass = {
+  primary: 'primary',
+  secondary: '',
+  ghost: 'ghost',
+}[variant];
+
+const sizeStyles: Record<string, string> = {
+  sm: 'padding: 4px 12px; font-size: var(--text-xs); border-radius: var(--glass-radius-xs);',
+  md: 'padding: var(--space-sm) var(--space-lg); font-size: var(--text-sm); border-radius: var(--glass-radius-sm);',
+  lg: 'padding: 10px 24px; font-size: var(--text-base); border-radius: var(--glass-radius);',
+};
+
+const refractiveClass = refractive ? ' refractive' : '';
+const tagClass = `glass-button ${variantClass}${refractiveClass} ${extraClass}`.trim();
+---
+
+<Tag
+  {...(href ? { href } : {})}
+  class={tagClass}
+  style={sizeStyles[size]}
+>
+  <slot />
+</Tag>

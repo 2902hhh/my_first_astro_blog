@@ -1,0 +1,67 @@
+---
+// PostCard.astro — Glass card blog post preview
+//
+// Props:
+//   title       - post title
+//   url         - post URL
+//   date        - publication date string (YYYY-MM-DD)
+//   description - optional short description
+//   author      - author name
+//   tags        - array of tag strings
+//   category    - "tech" | "life"
+//   pinned      - show pinned badge
+
+import GlassCard from './GlassCard.astro';
+import TagPill from './TagPill.astro';
+
+interface Props {
+  title: string;
+  url: string;
+  date: string;
+  description?: string;
+  author?: string;
+  tags?: string[];
+  category?: 'tech' | 'life';
+  pinned?: boolean;
+}
+
+const {
+  title,
+  url,
+  date,
+  description,
+  author,
+  tags = [],
+  category = 'tech',
+  pinned = false,
+} = Astro.props;
+
+const categoryLabel = category === 'tech' ? '技术博客' : '生活随笔';
+---
+
+<a href={url} class="post-card-link">
+  <GlassCard interactive>
+    <div class="post-card-meta">
+      {pinned && <span class="glass-pill pinned">📌 置顶</span>}
+      <span class={`glass-pill ${category}`}>{categoryLabel}</span>
+      <time
+        datetime={date}
+        style="color: var(--color-text-tertiary); font-size: var(--text-xs);"
+      >
+        {date}
+      </time>
+    </div>
+    <h3 class="post-card-title">{title}</h3>
+    {description && <p class="post-card-desc">{description}</p>}
+    <div class="post-card-footer">
+      {author && (
+        <span style="color: var(--color-text-tertiary); font-size: var(--text-xs);">
+          {author}
+        </span>
+      )}
+      {tags.slice(0, 3).map((tag: string) => (
+        <TagPill tag={tag} />
+      ))}
+    </div>
+  </GlassCard>
+</a>

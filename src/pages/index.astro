@@ -1,8 +1,60 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-const pageTitle = "Home Page";
+import GlassCard from '../components/GlassCard.astro';
+
+const pageTitle = "丁焕";
+const pageDescription = "Personal website of 丁焕.";
+
 ---
 
-<BaseLayout pageTitle={pageTitle}>
-	<h2>My blog subtitle</h2>
+<BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
+  <!-- Hero / About combined card -->
+  <section class="hero">
+    <GlassCard>
+      <div class="hero-inner">
+        <img
+          class="hero-avatar"
+          src="/images/head.jpg"
+          alt="丁焕"
+          width="160"
+          height="160"
+        />
+        <div class="hero-text">
+          <h1 class="hero-name">丁焕</h1>
+          <p style="margin-top: var(--space-md); color: var(--color-text-secondary);">
+            本科生，目前在厦门求学。
+          </p>
+        </div>
+      </div>
+    </GlassCard>
+  </section>
+
+  <!-- Blog sections -->
+  <section style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-bottom: var(--space-3xl);">
+    <GlassCard interactive>
+      <h3 style="margin: 0 0 var(--space-sm); font-size: var(--text-lg);">
+        <span class="glass-pill tech" style="margin-right: var(--space-sm);">技术</span>
+        Tech Blog
+      </h3>
+      <p style="margin: 0; color: var(--color-text-secondary); font-size: var(--text-sm);">
+        Notes on embedded systems, C/C++, Linux, ROS2, and projects I'm working on.
+      </p>
+      <div style="margin-top: var(--space-md);">
+        <a href="/tech" style="font-size: var(--text-sm); font-weight: 500;">Browse posts →</a>
+      </div>
+    </GlassCard>
+
+    <GlassCard interactive>
+      <h3 style="margin: 0 0 var(--space-sm); font-size: var(--text-lg);">
+        <span class="glass-pill life" style="margin-right: var(--space-sm);">生活</span>
+        Life Essays
+      </h3>
+      <p style="margin: 0; color: var(--color-text-secondary); font-size: var(--text-sm);">
+        Personal reflections, photography, and everyday stories.
+      </p>
+      <div style="margin-top: var(--space-md);">
+        <a href="/life" style="font-size: var(--text-sm); font-weight: 500;">Browse essays →</a>
+      </div>
+    </GlassCard>
+  </section>
 </BaseLayout>

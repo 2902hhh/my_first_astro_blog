@@ -1,0 +1,24 @@
+---
+// TagPill.astro — Glass pill badge for tags and categories
+//
+// Props:
+//   tag    - display text
+//   href   - optional link URL (renders as <a>, otherwise <span>)
+//   variant - "default" | "tech" | "life" (default: "default")
+
+interface Props {
+  tag: string;
+  href?: string;
+  variant?: 'default' | 'tech' | 'life';
+}
+
+const { tag, href, variant = 'default' } = Astro.props;
+const Tag = href ? 'a' : 'span';
+---
+
+<Tag
+  {...(href ? { href } : {})}
+  class={`glass-pill${variant !== 'default' ? ` ${variant}` : ''}`}
+>
+  {tag}
+</Tag>

@@ -1,15 +1,37 @@
 ---
-const { platform, username } = Astro.props;
+// Social.astro — Glass-styled social media link
+//
+// Props:
+//   platform - "github" | "twitter" | "email" etc.
+//   username - the handle/address
+//   label    - accessible label (defaults to platform)
+
+interface Props {
+  platform: string;
+  username: string;
+  label?: string;
+}
+
+const { platform, username, label } = Astro.props;
+const displayLabel = label || platform;
+
+// Map platforms to URLs
+const urlMap: Record<string, string> = {
+  github: `https://github.com/${username}`,
+  twitter: `https://twitter.com/${username}`,
+  email: `mailto:${username}`,
+  bilibili: `https://space.bilibili.com/${username}`,
+};
+
+const href = urlMap[platform] || `https://${platform}.com/${username}`;
 ---
 
-<a href={`https://${platform}.com/${username}`}>{platform}</a>
-
-<style>
-    a {
-        padding: 0.5rem 1rem;
-        color: white;
-        background-color: #4c1d95;
-        text-decoration: none;
-    }
-</style>
-
+<a
+  href={href}
+  class="glass-button"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label={displayLabel}
+>
+  {displayLabel}
+</a>
