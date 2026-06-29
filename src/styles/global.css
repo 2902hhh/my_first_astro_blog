@@ -23,10 +23,10 @@
   --glass-bg-subtle: rgba(255, 255, 255, 0.45);
   --glass-border: rgba(255, 255, 255, 0.35);
   --glass-border-strong: rgba(255, 255, 255, 0.55);
-  --glass-shadow: 0 2px 16px rgba(0, 0, 0, 0.06),
-                  0 0 0 0.5px rgba(0, 0, 0, 0.04);
-  --glass-shadow-hover: 0 4px 24px rgba(0, 0, 0, 0.08),
-                         0 0 0 0.5px rgba(0, 0, 0, 0.06);
+  --glass-shadow: 0 1px 4px rgba(0, 0, 0, 0.04),
+                  0 0 0 0.5px rgba(0, 0, 0, 0.03);
+  --glass-shadow-hover: 0 2px 12px rgba(0, 0, 0, 0.06),
+                         0 0 0 0.5px rgba(0, 0, 0, 0.04);
 
   /* Typography */
   --font-body: 'HarmonyOS Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
