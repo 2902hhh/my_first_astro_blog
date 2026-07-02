@@ -117,7 +117,49 @@
     </filter>
 
     <!-- ============================================================
-         FILTER 3: glass-specular
+         FILTER 3: glass-subtle
+         Ultra-light refraction for small elements like pills.
+         ============================================================ -->
+    <filter
+      id="glass-subtle"
+      x="-10%"
+      y="-10%"
+      width="120%"
+      height="120%"
+      color-interpolation-filters="sRGB"
+    >
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.7"
+        numOctaves="3"
+        seed="91"
+        result="noise"
+      />
+      <feGaussianBlur
+        in="noise"
+        stdDeviation="2"
+        result="smooth-noise"
+      />
+      <feComponentTransfer
+        in="smooth-noise"
+        result="displacement-map"
+      >
+        <feFuncR type="linear" slope="3" intercept="-0.5" />
+        <feFuncG type="linear" slope="3" intercept="-0.5" />
+        <feFuncB type="linear" slope="0" intercept="0.5" />
+        <feFuncA type="linear" slope="0" intercept="1" />
+      </feComponentTransfer>
+      <feDisplacementMap
+        in="SourceGraphic"
+        in2="displacement-map"
+        scale="2"
+        xChannelSelector="R"
+        yChannelSelector="G"
+      />
+    </filter>
+
+    <!-- ============================================================
+         FILTER 4: glass-specular
          Rim light effect — simulates the bright edge glow of
          light catching the curved edge of the glass surface.
          Uses feSpecularLighting with a point light source.
