@@ -7,7 +7,6 @@ export async function getStaticPaths() {
     import.meta.glob('../posts/*.md', { eager: true })
   );
 
-  // Dynamically extract all unique tags from post frontmatter
   const allTags = new Set<string>();
   for (const post of allPosts as any[]) {
     const tags: string[] = post.frontmatter.tags || [];
@@ -33,15 +32,15 @@ const filteredPosts = (posts as any[])
     return dateB - dateA;
   });
 
-const pageTitle = `Tag: ${tag}`;
-const pageDescription = `Posts tagged with "${tag}"`;
+const pageTitle = `标签：${tag}`;
+const pageDescription = `所有带有 ${tag} 标签的文章。`;
 ---
 
 <BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
   <div class="page-content">
     <div class="page-header">
-      <h1 style="text-transform: capitalize;">#{tag}</h1>
-      <p>{filteredPosts.length} post{filteredPosts.length !== 1 ? 's' : ''} tagged with "{tag}"</p>
+      <h1>#{tag}</h1>
+      <p>共 {filteredPosts.length} 篇文章</p>
     </div>
 
     {
@@ -62,9 +61,8 @@ const pageDescription = `Posts tagged with "${tag}"`;
           ))}
         </ul>
       ) : (
-        <div class="empty-state glass-card">
-          <div class="empty-state-icon">🏷️</div>
-          <p class="empty-state-text">No posts found with this tag.</p>
+        <div class="empty-state">
+          <p class="empty-state-text">没有找到这个标签下的文章。</p>
         </div>
       )
     }

@@ -33,14 +33,14 @@ export async function getStaticPaths() {
 
 const { posts, currentPage, totalPages } = Astro.props;
 const pageTitle = '技术博客';
-const pageDescription = 'Technical articles by 丁焕 — embedded systems, C/C++, Linux, ROS2, and more.';
+const pageDescription = '嵌入式、C/C++、Linux、ROS2 相关的学习笔记和项目记录。';
 ---
 
 <BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
   <div class="page-content">
     <div class="page-header">
       <h1>技术博客</h1>
-      <p>Thoughts, notes, and write-ups on technical topics.</p>
+      <p>学习笔记、项目记录，以及一些踩坑后的整理。</p>
     </div>
 
     {
@@ -62,15 +62,14 @@ const pageDescription = 'Technical articles by 丁焕 — embedded systems, C/C+
           ))}
         </ul>
       ) : (
-        <div class="empty-state glass-card">
-          <div class="empty-state-icon">📝</div>
-          <p class="empty-state-text">还没有技术文章，敬请期待。</p>
+        <div class="empty-state">
+          <p class="empty-state-text">这里还没有技术文章。</p>
         </div>
       )
     }
 
     {totalPages > 1 && (
-      <nav class="pagination" aria-label="Page navigation">
+      <nav class="pagination" aria-label="分页导航">
         {currentPage > 1 ? (
           <a href={currentPage === 2 ? '/tech' : `/tech/${currentPage - 1}`} class="glass-button">
             上一页

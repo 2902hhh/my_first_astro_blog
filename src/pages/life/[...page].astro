@@ -33,14 +33,14 @@ export async function getStaticPaths() {
 
 const { posts, currentPage, totalPages } = Astro.props;
 const pageTitle = '生活随笔';
-const pageDescription = 'Personal essays by 丁焕 — reflections, stories, and everyday moments.';
+const pageDescription = '日常感受、照片和一些不太像项目总结的记录。';
 ---
 
 <BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
   <div class="page-content">
     <div class="page-header">
       <h1>生活随笔</h1>
-      <p>Personal reflections, stories, and everyday moments.</p>
+      <p>一些日常观察、想法和阶段性的心情记录。</p>
     </div>
 
     {
@@ -62,21 +62,20 @@ const pageDescription = 'Personal essays by 丁焕 — reflections, stories, and
           ))}
         </ul>
       ) : (
-        <div class="empty-state glass-card">
-          <div class="empty-state-icon">🌿</div>
-          <p class="empty-state-text">还没有随笔，敬请期待。</p>
+        <div class="empty-state">
+          <p class="empty-state-text">这里还没有生活随笔。</p>
         </div>
       )
     }
 
     {totalPages > 1 && (
-      <nav class="pagination" aria-label="Page navigation">
+      <nav class="pagination" aria-label="分页导航">
         {currentPage > 1 ? (
           <a href={currentPage === 2 ? '/life' : `/life/${currentPage - 1}`} class="glass-button">
             上一页
           </a>
         ) : (
-          <span class="glass-button" style="opacity: 0.4; pointer-events: none;">← 上一页</span>
+          <span class="glass-button" style="opacity: 0.4; pointer-events: none;">上一页</span>
         )}
 
         <span class="pagination-info">
@@ -88,7 +87,7 @@ const pageDescription = 'Personal essays by 丁焕 — reflections, stories, and
             下一页
           </a>
         ) : (
-          <span class="glass-button" style="opacity: 0.4; pointer-events: none;">下一页 →</span>
+          <span class="glass-button" style="opacity: 0.4; pointer-events: none;">下一页</span>
         )}
       </nav>
     )}

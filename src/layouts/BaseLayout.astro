@@ -12,7 +12,7 @@ interface Props {
 
 const {
   pageTitle,
-  pageDescription = '丁焕 — personal website',
+  pageDescription = '丁焕的个人博客',
   lang = 'zh-CN',
 } = Astro.props;
 ---
@@ -25,9 +25,8 @@ const {
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={pageDescription} />
     <meta name="generator" content={Astro.generator} />
-    <title>{pageTitle} — 丁焕</title>
+    <title>{pageTitle} - 丁焕</title>
 
-    <!-- Liquid glass SVG filters (inline, no external requests) -->
     <GlassFilter />
   </head>
   <body>

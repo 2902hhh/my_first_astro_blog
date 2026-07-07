@@ -20,7 +20,6 @@ interface Props {
 
 const { frontmatter } = Astro.props;
 
-// Format date as YYYY-MM-DD
 const dateStr = frontmatter.pubDate instanceof Date
   ? frontmatter.pubDate.toISOString().slice(0, 10)
   : String(frontmatter.pubDate).slice(0, 10);
@@ -31,12 +30,10 @@ const categoryLabel = category === 'tech' ? '技术博客' : '生活随笔';
 
 <BaseLayout
   pageTitle={frontmatter.title}
-  pageDescription={frontmatter.description || `A post by ${frontmatter.author}`}
+  pageDescription={frontmatter.description || `${frontmatter.author} 的一篇文章`}
 >
   <article class="page-content">
-    <!-- Post metadata header -->
-    <header class="page-header">
-      <!-- Category badge -->
+    <header class="page-header article-header">
       <div style="margin-bottom: var(--space-md);">
         <a href={`/${category}`} class={`glass-pill ${category}`}>
           {categoryLabel}
@@ -45,40 +42,35 @@ const categoryLabel = category === 'tech' ? '技术博客' : '生活随笔';
 
       <h1>{frontmatter.title}</h1>
 
-      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm); color: var(--color-text-secondary); font-size: var(--text-sm); margin-top: var(--space-sm);">
+      <div class="article-meta">
         <time datetime={dateStr}>{dateStr}</time>
-        <span aria-hidden="true">·</span>
+        <span aria-hidden="true">/</span>
         <span>{frontmatter.author}</span>
       </div>
     </header>
 
-    <!-- Hero image (if present in frontmatter) -->
     {
-      frontmatter.image && (
+      frontmatter.image?.url && (
         <img
           src={frontmatter.image.url}
-          alt={frontmatter.image.alt}
-          style="width: 100%; max-height: 400px; object-fit: cover; border-radius: var(--glass-radius); margin-bottom: var(--space-2xl);"
+          alt={frontmatter.image.alt || ''}
+          class="article-cover"
           loading="lazy"
         />
       )
     }
 
-    <!-- Article body -->
     <div class="article-body">
       <slot />
     </div>
 
-    <!-- Tags footer -->
     {
       frontmatter.tags && frontmatter.tags.length > 0 && (
-        <footer style="margin-top: var(--space-3xl); padding-top: var(--space-xl); border-top: 1px solid var(--color-separator);">
-          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm);">
-            <span style="color: var(--color-text-tertiary); font-size: var(--text-sm);">Tags:</span>
-            {frontmatter.tags.map((tag: string) => (
-              <TagPill tag={tag} href={`/tags/${tag}`} />
-            ))}
-          </div>
+        <footer class="article-tags">
+          <span>标签</span>
+          {frontmatter.tags.map((tag: string) => (
+            <TagPill tag={tag} href={`/tags/${tag}`} />
+          ))}
         </footer>
       )
     }

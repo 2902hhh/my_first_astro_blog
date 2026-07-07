@@ -5,28 +5,26 @@
 /* --- CSS Custom Properties (Design Tokens) --- */
 :root {
   /* Color palette — Apple-style */
-  --color-bg: #f8f9fb;
-  --color-bg-end: #f3f4f6;
-  --color-bg-alt: #e8e8ed;
+  --color-bg: #fcfdff;
+  --color-bg-end: #f2f7ff;
+  --color-bg-alt: #eef5ff;
   --color-surface: #ffffff;
   --color-text: #1d1d1f;
-  --color-text-secondary: #86868b;
-  --color-text-tertiary: #aeaeb2;
-  --color-accent: #0071e3;
-  --color-accent-hover: #0077ed;
-  --color-separator: #d2d2d7;
+  --color-text-secondary: #626a76;
+  --color-text-tertiary: #8d96a3;
+  --color-accent: #0b74ff;
+  --color-accent-hover: #005bd6;
+  --color-separator: #dbe7f6;
   --color-danger: #ff3b30;
 
   /* Glass surface tokens */
-  --glass-bg: rgba(255, 255, 255, 0.72);
-  --glass-bg-strong: rgba(255, 255, 255, 0.85);
-  --glass-bg-subtle: rgba(255, 255, 255, 0.45);
-  --glass-border: rgba(255, 255, 255, 0.35);
-  --glass-border-strong: rgba(255, 255, 255, 0.55);
-  --glass-shadow: 0 1px 4px rgba(0, 0, 0, 0.04),
-                  0 0 0 0.5px rgba(0, 0, 0, 0.03);
-  --glass-shadow-hover: 0 2px 12px rgba(0, 0, 0, 0.06),
-                         0 0 0 0.5px rgba(0, 0, 0, 0.04);
+  --glass-bg: rgba(255, 255, 255, 0.86);
+  --glass-bg-strong: rgba(255, 255, 255, 0.96);
+  --glass-bg-subtle: rgba(255, 255, 255, 0.68);
+  --glass-border: rgba(35, 91, 180, 0.12);
+  --glass-border-strong: rgba(35, 91, 180, 0.2);
+  --glass-shadow: 0 1px 3px rgba(35, 91, 180, 0.045);
+  --glass-shadow-hover: 0 6px 18px rgba(35, 91, 180, 0.08);
 
   /* Typography */
   --font-body: 'HarmonyOS Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
@@ -59,9 +57,9 @@
   --header-height: 3.5rem;
 
   /* Glass parameters */
-  --glass-blur: 20px;
-  --glass-saturation: 180%;
-  --glass-radius: 20px;
+  --glass-blur: 12px;
+  --glass-saturation: 135%;
+  --glass-radius: 14px;
   --glass-radius-sm: 12px;
   --glass-radius-xs: 8px;
   --glass-refraction-scale: 4;
@@ -239,8 +237,6 @@ li {
   box-shadow: var(--glass-shadow);
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
   backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) url(#glass-refraction);
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) url(#glass-refraction);
   padding: var(--space-lg);
   transition: background var(--glass-transition),
               box-shadow var(--glass-transition),
@@ -255,21 +251,18 @@ li {
   pointer-events: none;
   z-index: 1;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.65),
-    inset 0 0 2px rgba(255, 255, 255, 0.3);
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
   transition: box-shadow var(--glass-transition);
 }
 
 .glass-card.interactive:hover {
   background: var(--glass-bg-strong);
   box-shadow: var(--glass-shadow-hover);
-  transform: translateY(-3px);
+  transform: translateY(-1px);
 }
 
 .glass-card.interactive:hover::before {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    inset 0 0 6px rgba(255, 255, 255, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
 }
 
 /* --- Glass Button --- */
@@ -379,17 +372,13 @@ li {
 .glass-pill {
   display: inline-flex;
   align-items: center;
-  padding: 2px 10px;
-  background: var(--glass-bg-subtle);
+  padding: 2px 8px;
+  background: rgba(36, 39, 46, 0.035);
   border: 1px solid var(--glass-border);
   border-radius: 100px;
   font-size: var(--text-xs);
   font-weight: 500;
   color: var(--color-text-secondary);
-  -webkit-backdrop-filter: blur(8px) saturate(var(--glass-saturation));
-  backdrop-filter: blur(8px) saturate(var(--glass-saturation));
-  -webkit-backdrop-filter: blur(8px) saturate(var(--glass-saturation)) url(#glass-subtle);
-  backdrop-filter: blur(8px) saturate(var(--glass-saturation)) url(#glass-subtle);
   transition: background var(--glass-transition),
               color var(--glass-transition);
   text-decoration: none;
@@ -402,15 +391,15 @@ a.glass-pill:hover {
 
 /* Category pill variants */
 .glass-pill.tech {
-  background: rgba(0, 113, 227, 0.1);
-  border-color: rgba(0, 113, 227, 0.2);
+  background: rgba(11, 116, 255, 0.1);
+  border-color: rgba(11, 116, 255, 0.22);
   color: var(--color-accent);
 }
 
 .glass-pill.life {
-  background: rgba(255, 149, 0, 0.1);
-  border-color: rgba(255, 149, 0, 0.2);
-  color: #c93400;
+  background: rgba(245, 132, 66, 0.12);
+  border-color: rgba(245, 132, 66, 0.24);
+  color: #b8561f;
 }
 
 .glass-pill.pinned {
@@ -447,7 +436,7 @@ a.glass-pill:hover {
 /* Menu button (mobile hamburger) */
 .menu {
   display: none;
-  background: var(--glass-bg);
+  background: transparent;
   border: 1px solid var(--glass-border);
   border-radius: var(--glass-radius-xs);
   color: var(--color-text);
@@ -456,8 +445,6 @@ a.glass-pill:hover {
   font-family: var(--font-body);
   padding: 6px 14px;
   cursor: pointer;
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
   transition: background var(--glass-transition),
               box-shadow var(--glass-transition);
 }
@@ -477,7 +464,7 @@ a.glass-pill:hover {
 .nav-links a {
   display: inline-flex;
   align-items: center;
-  padding: 6px 14px;
+  padding: 6px 12px;
   border-radius: var(--glass-radius-xs);
   color: var(--color-text-secondary);
   font-size: var(--text-sm);
@@ -495,7 +482,7 @@ a.glass-pill:hover {
 /* Active/current page indicator */
 .nav-links a[aria-current="page"] {
   color: var(--color-accent);
-  background: rgba(0, 113, 227, 0.08);
+  background: rgba(11, 116, 255, 0.09);
 }
 
 /* ============================================================
@@ -503,7 +490,7 @@ a.glass-pill:hover {
    ============================================================ */
 
 .hero {
-  padding: var(--space-4xl) 0 var(--space-3xl);
+  padding: var(--space-3xl) 0 var(--space-2xl);
 }
 
 .hero-inner {
@@ -527,15 +514,19 @@ a.glass-pill:hover {
 }
 
 .hero-name {
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: 700;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
   line-height: 1.1;
   margin: 0 0 var(--space-md);
-  background: linear-gradient(135deg, var(--color-text) 0%, #3a3a3f 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-text);
+}
+
+.hero-intro {
+  max-width: 28rem;
+  margin: var(--space-md) 0 0;
+  color: var(--color-text-secondary);
+  line-height: 1.75;
 }
 
 .hero-tagline {
@@ -585,11 +576,14 @@ a.glass-pill:hover {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: 0;
+  border-top: 1px solid var(--color-separator);
 }
 
 .post-list-item {
   list-style: none;
+  margin: 0;
+  border-bottom: 1px solid var(--color-separator);
 }
 
 .post-card-link {
@@ -602,25 +596,50 @@ a.glass-pill:hover {
   color: inherit;
 }
 
+.post-card {
+  padding: var(--space-lg) 0;
+  line-height: 1.6;
+  transition: background var(--glass-transition),
+              padding var(--glass-transition);
+}
+
+.post-card-link:hover .post-card {
+  background: rgba(11, 116, 255, 0.045);
+  padding-left: var(--space-sm);
+  padding-right: var(--space-sm);
+}
+
 .post-card-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-sm);
-  margin-bottom: var(--space-sm);
+  margin-bottom: 0.625rem;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-xs);
+}
+
+.post-card-meta time {
+  color: var(--color-text-tertiary);
 }
 
 .post-card-title {
-  font-size: var(--text-xl);
+  font-size: var(--text-lg);
   font-weight: 600;
   color: var(--color-text);
   margin: 0 0 var(--space-xs);
+  letter-spacing: 0;
+  transition: color var(--glass-transition);
+}
+
+.post-card-link:hover .post-card-title {
+  color: var(--color-accent-hover);
 }
 
 .post-card-desc {
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
-  line-height: 1.5;
+  line-height: 1.65;
   margin: 0;
 }
 
@@ -630,6 +649,11 @@ a.glass-pill:hover {
   align-items: center;
   gap: var(--space-sm);
   margin-top: var(--space-sm);
+}
+
+.post-card-author {
+  color: var(--color-text-tertiary);
+  font-size: var(--text-xs);
 }
 
 /* ============================================================
@@ -683,7 +707,9 @@ footer {
 
 .empty-state {
   text-align: center;
-  padding: var(--space-3xl) var(--space-xl);
+  padding: var(--space-2xl) 0;
+  border-top: 1px solid var(--color-separator);
+  border-bottom: 1px solid var(--color-separator);
 }
 
 .empty-state-icon {
@@ -694,7 +720,7 @@ footer {
 
 .empty-state-text {
   color: var(--color-text-secondary);
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   margin: 0;
 }
 
@@ -704,45 +730,53 @@ footer {
 
 article {
   padding: var(--space-2xl) 0;
-  line-height: 1.8;
+  line-height: 1.78;
 }
 
 article h1 {
-  font-size: var(--text-4xl);
+  font-size: var(--text-3xl);
   margin-top: 0;
+  letter-spacing: 0;
 }
 
 article h2 {
   margin-top: var(--space-2xl);
+  padding-top: var(--space-sm);
+  font-size: var(--text-2xl);
+  letter-spacing: 0;
 }
 
 article p {
-  margin-bottom: var(--space-lg);
+  margin-bottom: 1.15rem;
 }
 
 article img {
   max-width: 100%;
-  border-radius: var(--glass-radius-sm);
+  border-radius: var(--glass-radius-xs);
   margin: var(--space-lg) 0;
 }
 
 article blockquote {
-  border-left: 3px solid var(--color-accent);
+  border-left: 2px solid var(--color-accent);
   padding-left: var(--space-md);
   color: var(--color-text-secondary);
   margin: var(--space-lg) 0;
+  background: rgba(11, 116, 255, 0.055);
+  padding-top: var(--space-sm);
+  padding-bottom: var(--space-sm);
 }
 
 article code {
   font-family: var(--font-code);
   font-size: 0.9em;
-  background: var(--color-bg-alt);
+  background: #eef0f3;
   padding: 2px 6px;
   border-radius: 4px;
 }
 
 article pre {
-  background: var(--color-bg-alt);
+  background: #f2f3f5;
+  border: 1px solid var(--color-separator);
   border-radius: var(--glass-radius-sm);
   padding: var(--space-md);
   overflow-x: auto;
@@ -752,6 +786,47 @@ article pre {
 article pre code {
   background: none;
   padding: 0;
+}
+
+.article-header {
+  border-bottom: 1px solid var(--color-separator);
+  padding-bottom: var(--space-xl);
+}
+
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  margin-top: var(--space-sm);
+}
+
+.article-cover {
+  width: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  margin-bottom: var(--space-2xl);
+}
+
+.article-body {
+  color: var(--color-text);
+}
+
+.article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-3xl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--color-separator);
+}
+
+.article-tags span:first-child {
+  color: var(--color-text-tertiary);
+  font-size: var(--text-sm);
 }
 
 /* ============================================================
@@ -832,6 +907,11 @@ article pre code {
     margin: 0 0 var(--space-sm);
   }
 
+  .hero-intro {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   /* Homepage blog cards grid → stack */
   .blog-grid {
     grid-template-columns: 1fr;
@@ -851,7 +931,7 @@ article pre code {
     height: calc(100dvh - var(--header-height));
     flex-direction: column;
     align-items: stretch;
-    background: rgba(245, 245, 247, 0.97);
+    background: rgba(251, 251, 252, 0.98);
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     padding: var(--space-lg) var(--space-md);
@@ -883,6 +963,15 @@ article pre code {
   /* Post cards */
   .post-card-title {
     font-size: var(--text-lg);
+  }
+
+  .post-card {
+    padding: var(--space-md) 0;
+  }
+
+  .post-card-link:hover .post-card {
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .post-card-meta {
@@ -918,7 +1007,7 @@ article pre code {
   }
 
   article h1 {
-    font-size: var(--text-3xl);
+    font-size: var(--text-2xl);
   }
 
   article h2 {

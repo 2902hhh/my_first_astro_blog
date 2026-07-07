@@ -3,12 +3,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import GlassCard from '../components/GlassCard.astro';
 
 const pageTitle = "丁焕";
-const pageDescription = "Personal website of 丁焕.";
-
+const pageDescription = "丁焕的个人博客，记录技术学习、项目实践和生活片段。";
 ---
 
 <BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
-  <!-- Hero / About combined card -->
   <section class="hero">
     <GlassCard>
       <div class="hero-inner">
@@ -21,16 +19,15 @@ const pageDescription = "Personal website of 丁焕.";
         />
         <div class="hero-text">
           <h1 class="hero-name">丁焕</h1>
-          <p style="margin-top: var(--space-md); color: var(--color-text-secondary);">
-            本科生，目前在厦门求学。
+          <p class="hero-intro">
+            记录学习和生活里的长期问题。
           </p>
         </div>
       </div>
     </GlassCard>
   </section>
 
-  <!-- Blog sections -->
-  <section class="blog-grid">
+  <section class="blog-grid" aria-label="博客分类">
     <a href="/tech" class="card-link">
       <GlassCard interactive>
         <h3 style="margin: 0 0 var(--space-sm); font-size: var(--text-lg);">
@@ -38,10 +35,10 @@ const pageDescription = "Personal website of 丁焕.";
           技术博客
         </h3>
         <p style="margin: 0; color: var(--color-text-secondary); font-size: var(--text-sm);">
-          嵌入式、C/C++、Linux、ROS2 相关的学习笔记和项目记录。
+          学习笔记和项目记录。
         </p>
         <div style="margin-top: auto; padding-top: var(--space-md);">
-          <span style="font-size: var(--text-sm); font-weight: 500; color: var(--color-accent);">浏览文章 →</span>
+          <span style="font-size: var(--text-sm); font-weight: 500; color: var(--color-accent);">浏览文章</span>
         </div>
       </GlassCard>
     </a>
@@ -53,10 +50,10 @@ const pageDescription = "Personal website of 丁焕.";
           生活随笔
         </h3>
         <p style="margin: 0; color: var(--color-text-secondary); font-size: var(--text-sm);">
-          日常感悟、摄影和生活中的零碎记录。
+          日常感受、照片和一些思考。
         </p>
         <div style="margin-top: auto; padding-top: var(--space-md);">
-          <span style="font-size: var(--text-sm); font-weight: 500; color: var(--color-accent);">浏览随笔 →</span>
+          <span style="font-size: var(--text-sm); font-weight: 500; color: var(--color-accent);">浏览随笔</span>
         </div>
       </GlassCard>
     </a>
