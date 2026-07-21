@@ -493,6 +493,12 @@ a.glass-pill:hover {
   padding: var(--space-3xl) 0 var(--space-2xl);
 }
 
+/* Keep homepage panels crisp and editorial rather than overly pill-like. */
+.hero > .glass-card,
+.blog-grid .glass-card {
+  border-radius: var(--glass-radius-xs);
+}
+
 .hero-inner {
   display: flex;
   align-items: flex-start;
