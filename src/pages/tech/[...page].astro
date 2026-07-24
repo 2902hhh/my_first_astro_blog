@@ -32,14 +32,14 @@ export async function getStaticPaths() {
 }
 
 const { posts, currentPage, totalPages } = Astro.props;
-const pageTitle = '技术博客';
+const pageTitle = '技术相关';
 const pageDescription = '嵌入式、C/C++、Linux、ROS2 相关的学习笔记和项目记录。';
 ---
 
 <BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
   <div class="page-content">
     <div class="page-header">
-      <h1>技术博客</h1>
+      <h1>技术相关</h1>
       <p>学习笔记、项目记录，以及一些踩坑后的整理。</p>
     </div>
 

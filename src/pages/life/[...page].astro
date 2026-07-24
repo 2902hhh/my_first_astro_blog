@@ -32,14 +32,14 @@ export async function getStaticPaths() {
 }
 
 const { posts, currentPage, totalPages } = Astro.props;
-const pageTitle = '生活随笔';
+const pageTitle = '代码之外';
 const pageDescription = '日常感受、照片和一些不太像项目总结的记录。';
 ---
 
 <BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
   <div class="page-content">
     <div class="page-header">
-      <h1>生活随笔</h1>
+      <h1>代码之外</h1>
       <p>一些日常观察、想法和阶段性的心情记录。</p>
     </div>
 
@@ -63,7 +63,7 @@ const pageDescription = '日常感受、照片和一些不太像项目总结的�
         </ul>
       ) : (
         <div class="empty-state">
-          <p class="empty-state-text">这里还没有生活随笔。</p>
+          <p class="empty-state-text">这里还没有代码之外的文章。</p>
         </div>
       )
     }

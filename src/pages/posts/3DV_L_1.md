@@ -7,7 +7,9 @@ author: '丁焕'
 image:
   url: ''
   alt: ''
-tags: []
+tags: 
+  - PCA
+  - kernel PCA
 category: 'tech'
 pinned: false
 ---
