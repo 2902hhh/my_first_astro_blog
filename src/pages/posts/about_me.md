@@ -13,4 +13,4 @@ pinned: false
 ---
 
 首页的这张图片
-<img src="../../images/head.jpg" alt="异世界舅舅" title="look like me">
+<img src="../../images/head.jpg" alt="异世界舅舅" title="look like me" style="width: 50%; height: auto;">
