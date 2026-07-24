@@ -835,6 +835,13 @@ article pre code {
   font-size: var(--text-sm);
 }
 
+/* Keep long display equations usable on narrow screens. */
+.article-body .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: var(--space-xs) 0;
+}
+
 /* ============================================================
    RESPONSIVE — Tablet (< 768px)
    ============================================================ */
