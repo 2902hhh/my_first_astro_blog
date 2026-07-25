@@ -32,6 +32,7 @@ const categoryLabel = category === 'tech' ? '技术相关' : '代码之外';
 <BaseLayout
   pageTitle={frontmatter.title}
   pageDescription={frontmatter.description || `${frontmatter.author} 的一篇文章`}
+  activeCategory={category}
 >
   <article class="page-content">
     <header class="page-header article-header">

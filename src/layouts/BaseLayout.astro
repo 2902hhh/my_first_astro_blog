@@ -8,12 +8,14 @@ interface Props {
   pageTitle: string;
   pageDescription?: string;
   lang?: string;
+  activeCategory?: 'tech' | 'life';
 }
 
 const {
   pageTitle,
   pageDescription = '丁焕的个人博客',
   lang = 'zh-CN',
+  activeCategory,
 } = Astro.props;
 ---
 
@@ -30,7 +32,7 @@ const {
     <GlassFilter />
   </head>
   <body>
-    <Header />
+    <Header activeCategory={activeCategory} />
     <main>
       <slot />
     </main>

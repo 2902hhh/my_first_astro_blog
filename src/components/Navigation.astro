@@ -1,9 +1,15 @@
 ---
 // Main navigation links. Astro.url marks the current page as active.
+interface Props {
+  activeCategory?: 'tech' | 'life';
+}
+
+const { activeCategory } = Astro.props;
+const pathname = Astro.url.pathname;
 ---
 
 <div id="main-menu" class="nav-links">
-  <a href="/" aria-current={Astro.url.pathname === '/' ? 'page' : undefined}>首页</a>
-  <a href="/tech" aria-current={Astro.url.pathname.startsWith('/tech') ? 'page' : undefined}>技术相关</a>
-  <a href="/life" aria-current={Astro.url.pathname.startsWith('/life') ? 'page' : undefined}>代码之外</a>
+  <a href="/" aria-current={pathname === '/' ? 'page' : undefined}>首页</a>
+  <a href="/tech" aria-current={activeCategory === 'tech' || pathname.startsWith('/tech') ? 'page' : undefined}>技术相关</a>
+  <a href="/life" aria-current={activeCategory === 'life' || pathname.startsWith('/life') ? 'page' : undefined}>代码之外</a>
 </div>
