@@ -30,7 +30,7 @@ pinned: false
 制造太多不真实的图片不一定有帮助。
 
 
-<img src="../../images/video_contact_sheet.png" alt="从视频中抽出的部分画面" title="raising" style="display: block; width: auto; height: auto;">
+<img src="../../images/video_contact_sheet.jpg" alt="从视频中抽出的部分画面" title="raising" style="display: block; width: auto; height: auto;">
 
 
 这里还有一个很容易忽略的问题：负样本。
@@ -42,7 +42,7 @@ pinned: false
 第一版数据集最后有 599 张图片。划分时没有逐张随机，而是把同一段视频中连续 5 秒的画面
 放进同一组；增强图也跟着原图走。这样做主要是为了避免测试集里出现训练集的“近似复制品”。
 
-<img src="../../images/yolo26_dataset_check.png" alt="第一版数据集检查图" title="raising" style="display: block; width: auto; height: auto;">
+<img src="../../images/yolo26_dataset_check.jpg" alt="第一版数据集检查图" title="raising" style="display: block; width: auto; height: auto;">
 
 
 ## 第一版模型能不能用
@@ -74,7 +74,7 @@ PC 上的视频效果还可以，但换成 K230 自带的摄像头后，画面�
 K230 这一批清理时，发现了 19 个空样本和 14 张带重复框的图片。处理完以后，226 张图片
 都有且只有一个框，也没有缺失标签和格式错误。
 
-<img src="../../images/k230_predictions_contact_sheet.png" alt="K230 图片的模型预测检查" title="raising" style="display: block; width: auto; height: auto;">
+<img src="../../images/k230_predictions_contact_sheet.jpg" alt="K230 图片的模型预测检查" title="raising" style="display: block; width: auto; height: auto;">
 
 两轮增量之后，数据集从最初的 599 张增加到了 1033 张。这个过程给我的感觉是，与其一直
 调整训练参数，不如早点用最终要部署的摄像头拍一批数据。很多 PC 数据里看不出来的问题，
