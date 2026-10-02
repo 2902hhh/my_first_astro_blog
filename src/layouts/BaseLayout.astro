@@ -1,7 +1,6 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import GlassFilter from '../components/GlassFilter.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -9,6 +8,7 @@ interface Props {
   pageDescription?: string;
   lang?: string;
   activeCategory?: 'tech' | 'life';
+  appearance?: 'home' | 'tech' | 'life' | 'article' | 'tags';
 }
 
 const {
@@ -16,6 +16,7 @@ const {
   pageDescription = '丁焕的个人博客',
   lang = 'zh-CN',
   activeCategory,
+  appearance = 'tech',
 } = Astro.props;
 ---
 
@@ -29,11 +30,12 @@ const {
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle} - 丁焕</title>
 
-    <GlassFilter />
   </head>
-  <body>
+  <body data-appearance={appearance}>
+    <div class="aurora" aria-hidden="true"></div>
+    <a class="skip-link" href="#main-content">跳到正文</a>
     <Header activeCategory={activeCategory} />
-    <main>
+    <main id="main-content" tabindex="-1">
       <slot />
     </main>
     <Footer />

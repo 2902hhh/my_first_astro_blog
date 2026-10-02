@@ -1,95 +1,23 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostCard from '../../components/PostCard.astro';
+import PostList from '../../components/PostList.astro';
+import Pagination from '../../components/Pagination.astro';
+import { getCategoryPaths, type Post } from '../../lib/posts';
 
-export async function getStaticPaths() {
-  const allPosts = Object.values(
-    import.meta.glob('../posts/*.md', { eager: true })
-  );
-
-  const techPosts = (allPosts as any[])
-    .filter((post: any) => post.frontmatter.category === 'tech' || !post.frontmatter.category)
-    .sort((a: any, b: any) => {
-      if (a.frontmatter.pinned && !b.frontmatter.pinned) return -1;
-      if (!a.frontmatter.pinned && b.frontmatter.pinned) return 1;
-      return new Date(b.frontmatter.pubDate).getTime() - new Date(a.frontmatter.pubDate).getTime();
-    });
-
-  const POSTS_PER_PAGE = 4;
-  const totalPages = Math.max(1, Math.ceil(techPosts.length / POSTS_PER_PAGE));
-
-  return Array.from({ length: totalPages }, (_, i) => {
-    const pageNum = i + 1;
-    return {
-      params: { page: pageNum === 1 ? undefined : String(pageNum) },
-      props: {
-        posts: techPosts.slice(i * POSTS_PER_PAGE, (i + 1) * POSTS_PER_PAGE),
-        currentPage: pageNum,
-        totalPages,
-      },
-    };
-  });
+export function getStaticPaths() {
+  const posts = Object.values(import.meta.glob('../posts/*.md', { eager: true })) as Post[];
+  return getCategoryPaths(posts, 'tech');
 }
-
 const { posts, currentPage, totalPages } = Astro.props;
-const pageTitle = '技术相关';
-const pageDescription = '嵌入式、C/C++、Linux、ROS2 相关的学习笔记和项目记录。';
 ---
-
-<BaseLayout pageTitle={pageTitle} pageDescription={pageDescription}>
+<BaseLayout appearance="tech" pageTitle="技术相关" pageDescription="嵌入式、C/C++、Linux、ROS2 相关的学习笔记和项目记录。">
   <div class="page-content">
     <div class="page-header">
+      <span class="eyebrow">TECH / 技术</span>
       <h1>技术相关</h1>
       <p>学习笔记、项目记录，以及一些踩坑后的整理。</p>
     </div>
-
-    {
-      posts.length > 0 ? (
-        <ul class="post-list">
-          {posts.map((post: any) => (
-            <li class="post-list-item">
-              <PostCard
-                title={post.frontmatter.title}
-                url={post.url}
-                date={post.frontmatter.pubDate.toString().slice(0, 10)}
-                description={post.frontmatter.description}
-                author={post.frontmatter.author}
-                tags={post.frontmatter.tags || []}
-                category="tech"
-                pinned={post.frontmatter.pinned}
-              />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div class="empty-state">
-          <p class="empty-state-text">这里还没有技术文章。</p>
-        </div>
-      )
-    }
-
-    {totalPages > 1 && (
-      <nav class="pagination" aria-label="分页导航">
-        {currentPage > 1 ? (
-          <a href={currentPage === 2 ? '/tech' : `/tech/${currentPage - 1}`} class="glass-button">
-            上一页
-          </a>
-        ) : (
-          <span class="glass-button" style="opacity: 0.4; pointer-events: none;">上一页</span>
-        )}
-
-        <span class="pagination-info">
-          {currentPage} / {totalPages}
-        </span>
-
-        {currentPage < totalPages ? (
-          <a href={`/tech/${currentPage + 1}`} class="glass-button">
-            下一页
-          </a>
-        ) : (
-          <span class="glass-button" style="opacity: 0.4; pointer-events: none;">下一页</span>
-        )}
-      </nav>
-    )}
+    <PostList posts={posts} category="tech" emptyText="这里还没有技术文章。" />
+    <Pagination category="tech" currentPage={currentPage} totalPages={totalPages} />
   </div>
 </BaseLayout>

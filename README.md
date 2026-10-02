@@ -1,43 +1,35 @@
-# Astro Starter Kit: Minimal
+# 丁焕的个人博客
+
+基于 Astro 6 的静态博客，使用 Markdown 写作，支持技术与生活分类、置顶、分页、标签和 KaTeX 公式。
+
+## 本地运行
+
+需要 Node.js 22.12 或更新版本。
 
 ```sh
-npm create astro@latest -- --template minimal
+npm ci
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 检查与构建
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```sh
+npm run test:unit  # 分类、排序、分页边界及标签规则
+npm test          # 构建所有页面，再验证列表、链接、文章、图片和公式
+npm run build
+npm run preview
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 写作与维护
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- 文章位于 `src/pages/posts/`，可参考 `src/_post-template.md`。
+- 图片放入 `public/images/`。现有文章文件名决定 URL，修改文件名会改变文章地址。
+- 分类页每页 4 篇，置顶优先，其余按日期倒序；未设置分类的文章归入技术。
+- 标签页按日期倒序，不采用置顶规则。
+- `src/lib/posts.ts` 集中处理分类、标签和分页；`PostList.astro` 与 `Pagination.astro` 负责共用展示。
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Aurora 视觉约定
 
-## 🧞 Commands
+`src/styles/global.css` 集中定义颜色、间距、宽度和字体。首页使用蓝紫青色极光渐变，仅背景缓慢移动；生活分类偏紫粉；文章页减弱背景，正文宽度 720px。保留系统中文字体，不加载远程字体或动画库。
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+代码块、公式和表格在各自区域横向滚动，图片限制在正文宽度内。导航、标签与分页支持键盘焦点；系统开启减少动态效果时停止动画。

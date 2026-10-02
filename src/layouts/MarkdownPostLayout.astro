@@ -6,7 +6,7 @@ import 'katex/dist/katex.min.css';
 interface Props {
   frontmatter: {
     title: string;
-    pubDate: Date;
+    pubDate: string | Date;
     author: string;
     description?: string;
     image?: {
@@ -33,12 +33,13 @@ const categoryLabel = category === 'tech' ? '技术相关' : '代码之外';
   pageTitle={frontmatter.title}
   pageDescription={frontmatter.description || `${frontmatter.author} 的一篇文章`}
   activeCategory={category}
+  appearance="article"
 >
-  <article class="page-content">
+  <article class="page-content article-content">
     <header class="page-header article-header">
-      <div style="margin-bottom: var(--space-md);">
-        <a href={`/${category}`} class={`glass-pill ${category}`}>
-          {categoryLabel}
+      <div class="article-back">
+        <a href={`/${category}`} class="back-link">
+          <span aria-hidden="true">←</span> {categoryLabel}
         </a>
       </div>
 

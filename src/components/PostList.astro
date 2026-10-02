@@ -1,0 +1,26 @@
+---
+import PostCard from './PostCard.astro';
+import type { Post, Category } from '../lib/posts';
+interface Props { posts: Post[]; emptyText: string; category?: Category; showPinned?: boolean; }
+const { posts, emptyText, category, showPinned = true } = Astro.props;
+---
+{posts.length > 0 ? (
+  <ul class="post-list">
+    {posts.map(post => (
+      <li class="post-list-item">
+        <PostCard
+          title={post.frontmatter.title}
+          url={post.url}
+          date={post.frontmatter.pubDate.toString().slice(0, 10)}
+          description={post.frontmatter.description}
+          author={post.frontmatter.author}
+          tags={post.frontmatter.tags || []}
+          category={category || post.frontmatter.category || 'tech'}
+          pinned={showPinned && post.frontmatter.pinned}
+        />
+      </li>
+    ))}
+  </ul>
+) : (
+  <div class="empty-state"><p class="empty-state-text">{emptyText}</p></div>
+)}

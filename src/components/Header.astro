@@ -10,31 +10,9 @@ const { activeCategory } = Astro.props;
 ---
 
 <header class="site-header">
-  <nav>
+  <nav aria-label="主导航">
+    <a class="site-brand" href="/">丁焕<span aria-hidden="true"> · </span><span class="brand-note">个人博客</span></a>
     <Menu />
     <Navigation activeCategory={activeCategory} />
   </nav>
 </header>
-
-<style>
-  .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    width: 100%;
-    background: rgba(252, 253, 255, 0.88);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    border-bottom: 1px solid var(--color-separator);
-  }
-
-  .site-header nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: var(--header-height);
-    max-width: var(--content-width);
-    margin: 0 auto;
-    padding: 0;
-  }
-</style>

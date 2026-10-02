@@ -36,7 +36,7 @@ const categoryLabel = category === 'tech' ? '技术相关' : '代码之外';
       <time datetime={date}>{date}</time>
     </div>
 
-    <h3 class="post-card-title">{title}</h3>
+    <h2 class="post-card-title">{title}<span class="post-arrow" aria-hidden="true">↗</span></h2>
     {description && <p class="post-card-desc">{description}</p>}
 
     <div class="post-card-footer">

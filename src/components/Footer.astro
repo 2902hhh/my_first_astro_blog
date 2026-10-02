@@ -2,35 +2,12 @@
 import Social from './Social.astro';
 ---
 
-<footer>
+<footer class="site-footer">
   <div class="footer-inner">
-    <Social platform="github" username="2902hhh" />
-    <Social platform="email" username="2902351648@qq.com" />
+    <Social platform="github" username="2902hhh" label="GitHub" />
+    <Social platform="email" username="2902351648@qq.com" label="邮件" />
   </div>
-  <p class="footer-text" style="margin-top: var(--space-md);">
+  <p class="footer-text">
     &copy; {new Date().getFullYear()} 丁焕. Built with Astro.
   </p>
 </footer>
-
-<style>
-  footer {
-    margin-top: auto;
-    padding: var(--space-2xl) 0 var(--space-xl);
-    text-align: center;
-    border-top: 1px solid var(--color-separator);
-  }
-
-  .footer-inner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-md);
-    flex-wrap: wrap;
-  }
-
-  .footer-text {
-    color: var(--color-text-tertiary);
-    font-size: var(--text-sm);
-    margin: var(--space-md) 0 0;
-  }
-</style>
