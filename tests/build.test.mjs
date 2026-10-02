@@ -5,17 +5,22 @@ import { readFile } from 'node:fs/promises';
 const page = path => readFile(new URL(`../dist/${path}/index.html`, import.meta.url), 'utf8');
 const cards = html => [...html.matchAll(/href="([^"]+)" class="post-card-link"/g)].map(match => decodeURI(match[1]));
 
-test('home retains both categories and contact links', async () => {
+test('home retains both categories and contact links with the requested labels removed', async () => {
   const html = await page('.');
   for (const href of ['/tech', '/life', 'https://github.com/2902hhh', 'mailto:2902351648@qq.com']) assert.ok(html.includes(`href="${href}"`), href);
   assert.ok(html.includes('/images/head.jpg'));
+  assert.ok(html.includes('class="site-brand" href="/">丁焕</a>'));
+  assert.ok(!html.includes('学习与生活的记录'));
 });
 
-test('home exposes the three latest posts with descriptions and correct heading levels', async () => {
+test('home exposes the three latest posts with excerpts taken from their bodies', async () => {
   const html = await page('.');
   assert.deepEqual(cards(html), ['/posts/2026diansai', '/posts/human_vs_dogs', '/posts/亿万人']);
   assert.equal([...html.matchAll(/<h3 class="post-card-title"/g)].length, 3);
   assert.equal([...html.matchAll(/class="post-card-desc"/g)].length, 3);
+  assert.ok(html.includes('这次需要用摄像头识别一颗小钢球'));
+  assert.ok(html.includes('前段时间在网上看到这样一个问题'));
+  assert.ok(html.includes('亿万人必须爱彼此...... 亿万人不必再受苦...... 亿万人...幸福...'));
   assert.ok(!html.includes('class="glass-pill pinned"'));
 });
 
@@ -24,13 +29,18 @@ test('all category listings keep existing content and order', async () => {
   assert.deepEqual(cards(await page('life')), ['/posts/human_vs_dogs', '/posts/亿万人', '/posts/about_me']);
 });
 
-test('listing metadata includes summaries and a readable title while preserving the course URL', async () => {
+test('listings preserve written summaries and fill missing ones with author wording', async () => {
   const html = await page('tech');
-  assert.ok(html.includes('三维视觉课程笔记：PCA 与 Kernel PCA'));
+  assert.ok(html.includes('3DV_L_1'));
+  assert.ok(html.includes('课程笔记以及作业'));
+  assert.ok(html.includes('This is the first post of my new Astro blog.'));
   assert.ok(html.includes('href="/posts/3DV_L_1"'));
   assert.equal([...html.matchAll(/class="post-card-desc"/g)].length, 3);
   assert.ok(!html.includes('class="post-card-author"'));
-  assert.equal([...((await page('life')).matchAll(/class="post-card-desc"/g))].length, 3);
+  const life = await page('life');
+  assert.equal([...life.matchAll(/class="post-card-desc"/g)].length, 3);
+  assert.ok(life.includes('首页的这张图片'));
+  assert.ok(!life.includes('几句话，一张图。'));
 });
 
 test('long articles have working section targets, short articles omit the table of contents', async () => {

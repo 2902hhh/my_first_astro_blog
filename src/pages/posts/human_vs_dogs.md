@@ -2,7 +2,7 @@
 layout: ../../layouts/MarkdownPostLayout.astro
 title: '救人还是救狗'
 pubDate: 2026-07-25
-description: '如果火场中只能救自己的狗或一个婴儿，我会如何选择，以及这个选择背后的理由。'
+description: ''
 author: '丁焕'
 image:
   url: ''

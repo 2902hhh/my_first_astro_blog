@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { getCategoryPaths, postsForTag, getRecentPosts, getAdjacentPosts, formatDate } from '../src/lib/posts.ts';
+import { getCategoryPaths, postsForTag, getRecentPosts, getAdjacentPosts, getPostDescription, formatDate } from '../src/lib/posts.ts';
 const categoryPaths = (category, posts) => getCategoryPaths(posts, category);
 
 const post = (title, date, category, pinned = false) => ({ url: `/posts/${title}`, frontmatter: { title, pubDate: date, category, pinned } });
@@ -60,4 +60,36 @@ test('adjacent posts stay in the same category, use publication order and preser
 test('dates render consistently for strings and Markdown Date values', () => {
   assert.equal(formatDate('2026-08-04'), '2026-08-04');
   assert.equal(formatDate(new Date('2026-08-04T00:00:00Z')), '2026-08-04');
+});
+
+test('written summaries take priority and fallback excerpts preserve author wording', () => {
+  const article = post('excerpt', '2026-07-25', 'life');
+  article.rawContent = () => '亿万人必须爱彼此......\n\n亿万人不必再受苦......\n\n亿万人...幸福...';
+  article.frontmatter.description = '作者填写的摘要。';
+  assert.equal(getPostDescription(article), '作者填写的摘要。');
+  article.frontmatter.description = '  ';
+  assert.equal(getPostDescription(article), '亿万人必须爱彼此...... 亿万人不必再受苦...... 亿万人...幸福...');
+  assert.equal(article.frontmatter.description, '  ');
+});
+
+test('fallback excerpts omit formatting, images, code blocks and formulas', () => {
+  const article = post('excerpt', '2026-07-25', 'tech');
+  article.rawContent = () => [
+    '# 开头', '', '这是**原文**，参见[链接](https://example.com)。', '',
+    '![不要把图片说明当作正文](photo.png)', '<img src="photo.png" alt="图片说明">', '',
+    '```js', 'console.log("不是摘要");', '```', '', '$$x^2$$', '',
+    '> 后文保留 `kernel_pca` 和普通的 foo_bar。',
+  ].join('\n');
+  assert.equal(getPostDescription(article), '开头 这是原文，参见链接。 后文保留 kernel_pca 和普通的 foo_bar。');
+});
+
+test('excerpts truncate by Unicode character and leave text-free articles empty', () => {
+  const article = post('excerpt', '2026-07-25', 'life');
+  article.rawContent = () => '甲😀乙丙';
+  assert.equal(getPostDescription(article, 3), '甲😀乙…');
+  assert.equal(getPostDescription(article, 4), '甲😀乙丙');
+  article.rawContent = () => '![图片](photo.png)\n<img src="photo.png">\n```js\nconst x = 1;\n```';
+  assert.equal(getPostDescription(article), '');
+  delete article.rawContent;
+  assert.equal(getPostDescription(article), '');
 });

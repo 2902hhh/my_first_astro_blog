@@ -6,33 +6,34 @@ const allPosts = Object.values(import.meta.glob('./posts/*.md', { eager: true })
 const recentPosts = getRecentPosts(allPosts);
 ---
 <BaseLayout pageTitle="丁焕" pageDescription="丁焕的个人博客，记录技术学习、项目实践和生活片段。" appearance="home">
-  <section class="hero" aria-labelledby="hero-title">
-    <img class="hero-avatar" src="/images/head.jpg" alt="丁焕" width="160" height="160" fetchpriority="high" />
-    <div class="hero-text">
-      <span class="eyebrow">学习 · 实践 · 生活</span>
-      <h1 class="hero-name" id="hero-title">丁焕</h1>
-      <p class="hero-intro">记录学习和生活里的长期问题。</p>
+  <div class="home-layout">
+    <div class="home-profile">
+      <section class="hero" aria-labelledby="hero-title">
+        <img class="hero-avatar" src="/images/head.jpg" alt="丁焕" width="160" height="160" fetchpriority="high" />
+        <div class="hero-text">
+          <span class="eyebrow">学习 · 实践 · 生活</span>
+          <h1 class="hero-name" id="hero-title">丁焕</h1>
+          <p class="hero-intro">记录学习和生活里的长期问题。</p>
+        </div>
+      </section>
+      <section class="blog-grid" aria-label="博客分类">
+        <a href="/tech" class="category-link category-tech">
+          <div class="category-top"><span class="eyebrow">01 / TECH</span><span class="category-arrow" aria-hidden="true">↗</span></div>
+          <h2>技术相关</h2>
+          <p>学习笔记和项目记录。</p>
+        </a>
+        <a href="/life" class="category-link category-life">
+          <div class="category-top"><span class="eyebrow">02 / LIFE</span><span class="category-arrow" aria-hidden="true">↗</span></div>
+          <h2>代码之外</h2>
+          <p>日常感受、照片和一些思考。</p>
+        </a>
+      </section>
     </div>
-  </section>
-  <section class="blog-grid" aria-label="博客分类">
-    <a href="/tech" class="category-link category-tech">
-      <div class="category-top"><span class="eyebrow">01 / TECH</span><span class="category-arrow" aria-hidden="true">↗</span></div>
-      <h2>技术相关</h2>
-      <p>学习笔记和项目记录。</p>
-      <span class="category-cta">浏览文章 <span aria-hidden="true">→</span></span>
-    </a>
-    <a href="/life" class="category-link category-life">
-      <div class="category-top"><span class="eyebrow">02 / LIFE</span><span class="category-arrow" aria-hidden="true">↗</span></div>
-      <h2>代码之外</h2>
-      <p>日常感受、照片和一些思考。</p>
-      <span class="category-cta">浏览文章 <span aria-hidden="true">→</span></span>
-    </a>
-  </section>
-  <section class="home-recent" aria-labelledby="recent-title">
-    <header class="section-heading">
-      <div><span class="eyebrow">LATEST NOTES</span><h2 id="recent-title">最近更新</h2></div>
-      <span class="section-note">学习与生活的记录</span>
-    </header>
-    <PostList posts={recentPosts} emptyText="新的记录正在路上。" showPinned={false} headingLevel="h3" showLatestDate />
-  </section>
+    <section class="home-recent" aria-labelledby="recent-title">
+      <header class="section-heading">
+        <div><span class="eyebrow">LATEST NOTES</span><h2 id="recent-title">最近更新</h2></div>
+      </header>
+      <PostList posts={recentPosts} emptyText="新的记录正在路上。" showPinned={false} headingLevel="h3" showLatestDate />
+    </section>
+  </div>
 </BaseLayout>
