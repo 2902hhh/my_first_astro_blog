@@ -1,8 +1,8 @@
 ---
 layout: ../../layouts/MarkdownPostLayout.astro
-title: '3DV_L_1'
+title: '三维视觉课程笔记：PCA 与 Kernel PCA'
 pubDate: 2026-07-22
-description: '课程笔记以及作业'
+description: '从点云的主方向与 SVD 出发，整理 PCA、Kernel PCA 的基本思路，以及课程作业中的环境配置问题。'
 author: '丁焕'
 image:
   url: ''

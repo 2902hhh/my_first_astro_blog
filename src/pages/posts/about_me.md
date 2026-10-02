@@ -2,7 +2,7 @@
 layout: ../../layouts/MarkdownPostLayout.astro
 title: '关于我'
 pubDate: 2026-07-02
-description: ''
+description: '关于首页那张《异世界舅舅》的头像，以及我为什么一直使用它。'
 author: '丁焕'
 image:
   url: ''

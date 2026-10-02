@@ -1,5 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PostList from '../components/PostList.astro';
+import { getRecentPosts } from '../lib/posts';
+const allPosts = Object.values(import.meta.glob('./posts/*.md', { eager: true })) as import('../lib/posts').Post[];
+const recentPosts = getRecentPosts(allPosts);
 ---
 <BaseLayout pageTitle="丁焕" pageDescription="丁焕的个人博客，记录技术学习、项目实践和生活片段。" appearance="home">
   <section class="hero" aria-labelledby="hero-title">
@@ -23,5 +27,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <p>日常感受、照片和一些思考。</p>
       <span class="category-cta">浏览文章 <span aria-hidden="true">→</span></span>
     </a>
+  </section>
+  <section class="home-recent" aria-labelledby="recent-title">
+    <header class="section-heading">
+      <div><span class="eyebrow">LATEST NOTES</span><h2 id="recent-title">最近更新</h2></div>
+      <span class="section-note">学习与生活的记录</span>
+    </header>
+    <PostList posts={recentPosts} emptyText="新的记录正在路上。" showPinned={false} headingLevel="h3" showLatestDate />
   </section>
 </BaseLayout>

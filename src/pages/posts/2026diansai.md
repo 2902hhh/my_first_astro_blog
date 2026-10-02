@@ -2,7 +2,7 @@
 layout: ../../layouts/MarkdownPostLayout.astro
 title: '2026电赛H题视觉记录'
 pubDate: 2026-08-04
-description: ''
+description: '从视频采集、YOLO 训练到 K230 部署，记录电赛视觉方案中的数据整理、模型转换和板端调试。'
 author: '丁焕'
 image:
   url: ''

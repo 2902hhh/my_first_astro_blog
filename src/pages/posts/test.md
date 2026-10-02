@@ -2,7 +2,7 @@
 layout: ../../layouts/MarkdownPostLayout.astro
 title: My First Blog Post
 pubDate: 2026-06-18
-description: This is the first post of my new Astro blog.
+description: '为什么要建立这个博客，以及用 Astro 构建一个属于自己的电子随笔本的过程。'
 author: dinghuan
 image:
   url: https://docs.astro.build/assets/rose.webp

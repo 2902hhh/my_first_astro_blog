@@ -1,0 +1,15 @@
+---
+import type { Post } from '../lib/posts';
+interface Props { previous?: Post; next?: Post; }
+const { previous, next } = Astro.props;
+---
+{(previous || next) && (
+  <nav class="post-navigation" aria-label="同分类文章导航">
+    {previous && <a href={previous.url} rel="prev" class="post-nav-previous">
+      <span class="post-nav-label">← 上一篇</span><span class="post-nav-title">{previous.frontmatter.title}</span>
+    </a>}
+    {next && <a href={next.url} rel="next" class="post-nav-next">
+      <span class="post-nav-label">下一篇 →</span><span class="post-nav-title">{next.frontmatter.title}</span>
+    </a>}
+  </nav>
+)}

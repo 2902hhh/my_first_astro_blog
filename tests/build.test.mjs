@@ -11,9 +11,47 @@ test('home retains both categories and contact links', async () => {
   assert.ok(html.includes('/images/head.jpg'));
 });
 
+test('home exposes the three latest posts with descriptions and correct heading levels', async () => {
+  const html = await page('.');
+  assert.deepEqual(cards(html), ['/posts/2026diansai', '/posts/human_vs_dogs', '/posts/亿万人']);
+  assert.equal([...html.matchAll(/<h3 class="post-card-title"/g)].length, 3);
+  assert.equal([...html.matchAll(/class="post-card-desc"/g)].length, 3);
+  assert.ok(!html.includes('class="glass-pill pinned"'));
+});
+
 test('all category listings keep existing content and order', async () => {
   assert.deepEqual(cards(await page('tech')), ['/posts/test', '/posts/2026diansai', '/posts/3DV_L_1']);
   assert.deepEqual(cards(await page('life')), ['/posts/human_vs_dogs', '/posts/亿万人', '/posts/about_me']);
+});
+
+test('listing metadata includes summaries and a readable title while preserving the course URL', async () => {
+  const html = await page('tech');
+  assert.ok(html.includes('三维视觉课程笔记：PCA 与 Kernel PCA'));
+  assert.ok(html.includes('href="/posts/3DV_L_1"'));
+  assert.equal([...html.matchAll(/class="post-card-desc"/g)].length, 3);
+  assert.ok(!html.includes('class="post-card-author"'));
+  assert.equal([...((await page('life')).matchAll(/class="post-card-desc"/g))].length, 3);
+});
+
+test('long articles have working section targets, short articles omit the table of contents', async () => {
+  for (const path of ['posts/2026diansai', 'posts/3dv_l_1']) {
+    const html = await page(path);
+    const toc = html.match(/<aside class="article-toc"[\s\S]*?<\/aside>/)?.[0];
+    assert.ok(toc, path);
+    const links = [...toc.matchAll(/href="#([^"]+)"/g)];
+    assert.ok(links.length >= 3, path);
+    for (const [, slug] of links) assert.ok(html.includes(`id="${slug}"`), slug);
+  }
+  assert.ok(!(await page('posts/human_vs_dogs')).includes('<aside class="article-toc"'));
+});
+
+test('article navigation links to chronological siblings within its category', async () => {
+  const links = html => [...(html.match(/<nav class="post-navigation"[\s\S]*?<\/nav>/)?.[0] || '').matchAll(/href="([^"]+)"/g)].map(match => decodeURI(match[1]));
+  assert.deepEqual(links(await page('posts/3dv_l_1')), ['/posts/test', '/posts/2026diansai']);
+  assert.deepEqual(links(await page('posts/2026diansai')), ['/posts/3DV_L_1']);
+  const life = links(await page('posts/about_me'));
+  assert.equal(life.length, 1);
+  assert.ok(life.every(url => !url.includes('2026diansai') && !url.includes('3DV_L_1')));
 });
 
 test('tag pages and article metadata, covers, images and math still render', async () => {

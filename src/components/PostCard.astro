@@ -8,7 +8,8 @@ interface Props {
   url: string;
   date: string;
   description?: string;
-  author?: string;
+  headingLevel?: 'h2' | 'h3';
+  updated?: boolean;
   tags?: string[];
   category?: 'tech' | 'life';
   pinned?: boolean;
@@ -19,13 +20,15 @@ const {
   url,
   date,
   description,
-  author,
+  headingLevel = 'h2',
+  updated = false,
   tags = [],
   category = 'tech',
   pinned = false,
 } = Astro.props;
 
 const categoryLabel = category === 'tech' ? '技术相关' : '代码之外';
+const Heading = headingLevel;
 ---
 
 <a href={url} class="post-card-link">
@@ -33,17 +36,16 @@ const categoryLabel = category === 'tech' ? '技术相关' : '代码之外';
     <div class="post-card-meta">
       {pinned && <span class="glass-pill pinned">置顶</span>}
       <span class={`glass-pill ${category}`}>{categoryLabel}</span>
-      <time datetime={date}>{date}</time>
+      <time datetime={date}>{date}{updated && ' · 更新'}</time>
     </div>
 
-    <h2 class="post-card-title">{title}<span class="post-arrow" aria-hidden="true">↗</span></h2>
+    <Heading class="post-card-title">{title}<span class="post-arrow" aria-hidden="true">↗</span></Heading>
     {description && <p class="post-card-desc">{description}</p>}
 
-    <div class="post-card-footer">
-      {author && <span class="post-card-author">{author}</span>}
+    {tags.length > 0 && <div class="post-card-footer">
       {tags.slice(0, 3).map((tag: string) => (
         <TagPill tag={tag} />
       ))}
-    </div>
+    </div>}
   </article>
 </a>

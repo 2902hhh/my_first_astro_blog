@@ -1,8 +1,8 @@
 ---
 import PostCard from './PostCard.astro';
-import type { Post, Category } from '../lib/posts';
-interface Props { posts: Post[]; emptyText: string; category?: Category; showPinned?: boolean; }
-const { posts, emptyText, category, showPinned = true } = Astro.props;
+import { formatDate, type Post, type Category } from '../lib/posts';
+interface Props { posts: Post[]; emptyText: string; category?: Category; showPinned?: boolean; headingLevel?: 'h2' | 'h3'; showLatestDate?: boolean; }
+const { posts, emptyText, category, showPinned = true, headingLevel = 'h2', showLatestDate = false } = Astro.props;
 ---
 {posts.length > 0 ? (
   <ul class="post-list">
@@ -11,9 +11,10 @@ const { posts, emptyText, category, showPinned = true } = Astro.props;
         <PostCard
           title={post.frontmatter.title}
           url={post.url}
-          date={post.frontmatter.pubDate.toString().slice(0, 10)}
+          date={formatDate(showLatestDate ? post.frontmatter.updatedDate || post.frontmatter.pubDate : post.frontmatter.pubDate)}
+          updated={showLatestDate && !!post.frontmatter.updatedDate}
+          headingLevel={headingLevel}
           description={post.frontmatter.description}
-          author={post.frontmatter.author}
           tags={post.frontmatter.tags || []}
           category={category || post.frontmatter.category || 'tech'}
           pinned={showPinned && post.frontmatter.pinned}

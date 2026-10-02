@@ -3,6 +3,7 @@ export type Category = 'tech' | 'life';
 export interface PostFrontmatter {
   title: string;
   pubDate: string | Date;
+  updatedDate?: string | Date;
   author?: string;
   description?: string;
   category?: Category;
@@ -18,6 +19,26 @@ export interface Post {
 
 const newestFirst = (a: Post, b: Post) =>
   new Date(b.frontmatter.pubDate).getTime() - new Date(a.frontmatter.pubDate).getTime();
+
+export function formatDate(date: string | Date) {
+  return date instanceof Date ? date.toISOString().slice(0, 10) : String(date).slice(0, 10);
+}
+
+export function getRecentPosts(posts: Post[], limit = 3) {
+  const activityDate = (post: Post) => new Date(post.frontmatter.updatedDate || post.frontmatter.pubDate).getTime();
+  return [...posts].sort((a, b) => activityDate(b) - activityDate(a)).slice(0, limit);
+}
+
+export function getAdjacentPosts(posts: Post[], url: string) {
+  // Markdown routes may be encoded or use the lowercased path emitted by Astro.
+  const normalize = (path: string) => decodeURI(path).replace(/\/+$/, '').toLowerCase();
+  const current = posts.find(post => normalize(post.url) === normalize(url));
+  if (!current) return { previous: undefined, next: undefined };
+  const category = current.frontmatter.category || 'tech';
+  const siblings = posts.filter(post => (post.frontmatter.category || 'tech') === category).sort(newestFirst);
+  const index = siblings.indexOf(current);
+  return { previous: siblings[index + 1], next: siblings[index - 1] };
+}
 
 export function getCategoryPaths(allPosts: Post[], category: Category) {
   const posts = allPosts.filter(post => (post.frontmatter.category || 'tech') === category)

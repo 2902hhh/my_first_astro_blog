@@ -1,0 +1,14 @@
+<dialog class="image-viewer" aria-labelledby="image-viewer-title">
+  <header class="image-viewer-header">
+    <h2 id="image-viewer-title">图片预览</h2>
+    <div class="image-viewer-actions">
+      <button type="button" class="image-size-toggle" aria-pressed="false">查看原尺寸</button>
+      <button type="button" class="image-viewer-close" autofocus>关闭 <span aria-hidden="true">×</span></button>
+    </div>
+  </header>
+  <figure class="image-viewer-figure">
+    <div class="image-viewer-canvas"><img alt="" /></div>
+    <figcaption></figcaption>
+  </figure>
+  <p class="image-viewer-error" role="alert" hidden>图片加载失败，请关闭后重试。</p>
+</dialog>
