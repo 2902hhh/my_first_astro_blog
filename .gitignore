@@ -5,6 +5,9 @@ dist/
 
 # dependencies
 node_modules/
+studio/build/
+studio/out/
+studio/.test-data/
 .npm-cache/
 
 # logs

@@ -1,0 +1,14 @@
+import { build } from 'esbuild';
+import { mkdir, cp, copyFile } from 'node:fs/promises';
+import path from 'node:path';
+const root = path.resolve(import.meta.dirname, '..');
+const out = path.join(root, 'build');
+await mkdir(path.join(out, 'ui'), { recursive: true });
+await mkdir(path.join(out, 'ui/assets'), { recursive: true });
+await copyFile(path.join(root, '../public/images/head.jpg'), path.join(out, 'ui/assets/avatar.jpg'));
+await build({ entryPoints: [path.join(root, 'src/main.mjs')], outfile: path.join(out, 'main.cjs'), bundle: true, platform: 'node', format: 'cjs', target: 'node24', external: ['electron'], define: { 'import.meta.dirname': '__dirname' } });
+await build({ entryPoints: [path.join(root, 'src/ui/renderer.js')], outfile: path.join(out, 'ui/renderer.js'), bundle: true, platform: 'browser', format: 'iife', target: 'chrome130' });
+await copyFile(path.join(root, 'src/preload.cjs'), path.join(out, 'preload.cjs'));
+for (const file of ['index.html', 'style.css']) await copyFile(path.join(root, 'src/ui', file), path.join(out, 'ui', file));
+await cp(path.join(root, 'node_modules/vditor/dist'), path.join(out, 'ui/vendor/vditor/dist'), { recursive: true });
+console.log('写作应用构建完成。');

@@ -11,6 +11,9 @@
     "preview": "astro preview",
     "test": "astro build && node --test tests/*.test.mjs",
     "test:unit": "node --test tests/listing.test.mjs",
+    "studio": "npm run start --prefix studio",
+    "studio:package": "npm run package --prefix studio",
+    "test:studio": "npm test --prefix studio",
     "astro": "astro"
   },
   "dependencies": {

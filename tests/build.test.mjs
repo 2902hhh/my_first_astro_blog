@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import config from '../astro.config.mjs';
 
 const page = path => readFile(new URL(`../dist/${path}/index.html`, import.meta.url), 'utf8');
 const cards = html => [...html.matchAll(/href="([^"]+)" class="post-card-link"/g)].map(match => decodeURI(match[1]));
@@ -25,17 +26,17 @@ test('home exposes the three latest posts with excerpts taken from their bodies'
 });
 
 test('all category listings keep existing content and order', async () => {
-  assert.deepEqual(cards(await page('tech')), ['/posts/test', '/posts/2026diansai', '/posts/3DV_L_1']);
+  assert.deepEqual(cards(await page('tech')), ['/posts/test', '/posts/2026diansai']);
   assert.deepEqual(cards(await page('life')), ['/posts/human_vs_dogs', '/posts/亿万人', '/posts/about_me']);
 });
 
 test('listings preserve written summaries and fill missing ones with author wording', async () => {
   const html = await page('tech');
-  assert.ok(html.includes('3DV_L_1'));
-  assert.ok(html.includes('课程笔记以及作业'));
+  assert.ok(html.includes('2026电赛H题视觉记录'));
+  assert.ok(html.includes('这次需要用摄像头识别一颗小钢球'));
   assert.ok(html.includes('This is the first post of my new Astro blog.'));
-  assert.ok(html.includes('href="/posts/3DV_L_1"'));
-  assert.equal([...html.matchAll(/class="post-card-desc"/g)].length, 3);
+  assert.ok(html.includes('href="/posts/2026diansai"'));
+  assert.equal([...html.matchAll(/class="post-card-desc"/g)].length, 2);
   assert.ok(!html.includes('class="post-card-author"'));
   const life = await page('life');
   assert.equal([...life.matchAll(/class="post-card-desc"/g)].length, 3);
@@ -44,7 +45,7 @@ test('listings preserve written summaries and fill missing ones with author word
 });
 
 test('long articles have working section targets, short articles omit the table of contents', async () => {
-  for (const path of ['posts/2026diansai', 'posts/3dv_l_1']) {
+  for (const path of ['posts/2026diansai', 'posts/test']) {
     const html = await page(path);
     const toc = html.match(/<aside class="article-toc"[\s\S]*?<\/aside>/)?.[0];
     assert.ok(toc, path);
@@ -57,21 +58,23 @@ test('long articles have working section targets, short articles omit the table 
 
 test('article navigation links to chronological siblings within its category', async () => {
   const links = html => [...(html.match(/<nav class="post-navigation"[\s\S]*?<\/nav>/)?.[0] || '').matchAll(/href="([^"]+)"/g)].map(match => decodeURI(match[1]));
-  assert.deepEqual(links(await page('posts/3dv_l_1')), ['/posts/test', '/posts/2026diansai']);
-  assert.deepEqual(links(await page('posts/2026diansai')), ['/posts/3DV_L_1']);
+  assert.deepEqual(links(await page('posts/test')), ['/posts/2026diansai']);
+  assert.deepEqual(links(await page('posts/2026diansai')), ['/posts/test']);
   const life = links(await page('posts/about_me'));
   assert.equal(life.length, 1);
   assert.ok(life.every(url => !url.includes('2026diansai') && !url.includes('3DV_L_1')));
 });
 
 test('tag pages and article metadata, covers, images and math still render', async () => {
-  for (const tag of ['astro', 'blogging', 'learning in public', 'PCA', 'kernel PCA', '电赛']) {
+  for (const tag of ['astro', 'blogging', 'learning in public', '电赛']) {
     const html = await page(`tags/${tag}`);
     assert.equal(cards(html).length, 1, tag);
     assert.ok(html.includes('共 1 篇文章'));
   }
-  const math = await page('posts/3dv_l_1');
-  assert.ok(math.includes('class="katex'));
+  // Verify configured math rendering independently of which articles are public.
+  const renderer = await config.markdown.processor.createRenderer({});
+  const math = await renderer.render('$$x_i \\in \\mathbb{R}^3$$');
+  assert.ok(math.code.includes('class="katex'));
   const first = await page('posts/test');
   assert.ok(first.includes('2026-06-18'));
   assert.ok(first.includes('https://docs.astro.build/assets/rose.webp'));
