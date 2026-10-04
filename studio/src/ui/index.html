@@ -12,7 +12,7 @@
 <body>
   <a class="skip-link" href="#title">开始编辑</a>
   <div class="app-shell">
-    <aside class="library" aria-label="文章管理">
+    <aside id="library" class="library" aria-label="文章管理">
       <div class="brand"><img src="/assets/avatar.jpg" alt="" width="40" height="40"><div><strong>本地写作</strong><span>本地写作空间</span></div></div>
       <button id="new" class="primary wide"><span aria-hidden="true">＋</span> 新建文章</button>
       <nav class="tabs" aria-label="文章状态"><button id="drafts-tab" aria-current="page">草稿箱 <span id="draft-count">0</span></button><button id="posts-tab">已公开 <span id="post-count">0</span></button></nav>
@@ -20,14 +20,16 @@
       <div id="items" class="items"></div>
       <div class="library-footer"><button id="choose-repo">选择博客项目</button><p id="repo-name">尚未连接博客</p></div>
     </aside>
+    <div id="left-resizer" class="panel-resizer" role="separator" aria-orientation="vertical" aria-label="调整左侧栏宽度" aria-controls="library" tabindex="0" title="拖动调整左侧栏宽度；方向键微调，双击恢复默认"></div>
     <main class="workspace">
-      <header class="topbar"><div><span id="document-state" class="status-chip">草稿</span><span id="save-state" role="status" aria-live="polite">尚未打开文章</span></div><div class="actions"><button id="save">保存 <kbd>Ctrl S</kbd></button><button id="preview">预览</button><button id="publish" class="primary">公开发布 <span aria-hidden="true">↗</span></button></div></header>
+      <header class="topbar"><div><span id="document-state" class="status-chip">草稿</span><span id="save-state" role="status" aria-live="polite">尚未打开文章</span></div><div class="actions"><button id="layout-settings">布局</button><button id="save">保存 <kbd>Ctrl S</kbd></button><button id="preview">预览</button><button id="publish" class="primary">公开发布 <span aria-hidden="true">↗</span></button></div></header>
       <div id="message" class="message" role="status" aria-live="polite" hidden></div>
       <div id="pending" class="pending" hidden><span>有一次发布已提交，尚未推送。</span><button id="retry">重试推送</button></div>
       <div id="welcome" class="welcome"><span class="eyebrow">WRITING SPACE</span><h1>从一篇草稿开始</h1><p>连接博客后，新建文章或打开已有文章。内容自动保存在本机。</p><button id="welcome-new" class="primary">新建文章</button></div>
-      <div id="writing" class="writing" hidden><label class="sr-only" for="title">文章标题</label><input id="title" class="document-title" placeholder="文章标题" maxlength="500"><div class="editor-caption"><div><label for="mode">正文</label><select id="mode"><option value="wysiwyg">可视化编辑</option><option value="sv">Markdown</option></select></div><span>拖入或粘贴图片即可插入 · 点击图片调整大小与裁剪</span></div><div id="editor"></div><footer class="document-footer"><span id="word-count">0 字</span><span>草稿仅保存在本机，公开发布后进入博客</span></footer></div>
+      <div id="writing" class="writing" hidden><label class="sr-only" for="title">文章标题</label><input id="title" class="document-title" placeholder="文章标题" maxlength="500"><div class="editor-caption"><div><label for="mode">正文</label><select id="mode"><option value="wysiwyg">可视化编辑</option><option value="sv">Markdown</option></select><button id="live-preview-toggle" type="button" aria-pressed="true" hidden>实时预览</button></div><span>拖入或粘贴图片即可插入 · 点击图片调整大小与裁剪</span></div><div id="editor"></div><footer class="document-footer"><span id="word-count">0 字</span><span>草稿仅保存在本机，公开发布后进入博客</span></footer></div>
     </main>
-    <aside class="inspector" aria-label="文章设置">
+    <div id="right-resizer" class="panel-resizer" role="separator" aria-orientation="vertical" aria-label="调整右侧栏宽度" aria-controls="inspector" tabindex="0" title="拖动调整右侧栏宽度；方向键微调，双击恢复默认"></div>
+    <aside id="inspector" class="inspector" aria-label="文章设置">
       <h2>文章设置</h2>
       <div id="settings"><label for="category">分类</label><select id="category"><option value="tech">技术相关</option><option value="life">代码之外</option></select>
       <label for="description">摘要 <span>选填</span></label><textarea id="description" rows="3" maxlength="4000" placeholder="留空时，博客从正文开头截取原文"></textarea>
@@ -42,6 +44,7 @@
     </aside>
   </div>
   <input id="image-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif" multiple hidden>
+  <dialog id="layout-dialog"><form id="layout-form"><div class="dialog-header"><h2>调整布局</h2><button type="button" data-close="layout-dialog" aria-label="关闭布局设置">×</button></div><div class="layout-fields"><label for="layout-left">左侧栏宽度（像素）</label><input id="layout-left" type="number" min="180" max="420" required><label for="layout-right">右侧栏宽度（像素）</label><input id="layout-right" type="number" min="220" max="480" required><label for="layout-preview">实时预览宽度（%）</label><input id="layout-preview" type="number" min="15" max="85" required></div><p class="hint">也可拖动分隔线，或选中分隔线后用左右方向键调节。窗口变窄时会保留正文的最小宽度。</p><div class="dialog-actions"><button id="layout-reset" type="button">恢复默认</button><button type="submit" class="primary">应用</button></div></form></dialog>
   <dialog id="preview-dialog" class="preview-dialog"><div class="dialog-header"><h2>文章预览</h2><button data-close="preview-dialog" aria-label="关闭预览">×</button></div><article class="preview-content"><h1 id="preview-title"></h1><div id="preview-body"></div></article></dialog>
   <dialog id="confirm-dialog"><div class="dialog-header"><h2 id="confirm-title">公开发布</h2><button data-close="confirm-dialog" aria-label="关闭确认窗口">×</button></div><p id="confirm-message"></p><dl id="confirm-details"></dl><p id="confirm-note" class="hint"></p><div class="dialog-actions"><button data-close="confirm-dialog">取消</button><button id="confirm-action" class="primary">确认发布</button></div></dialog>
   <dialog id="crop-dialog" class="crop-dialog"><div class="dialog-header"><h2>裁剪图片</h2><button data-close="crop-dialog" aria-label="关闭裁剪">×</button></div><div id="crop-container"></div><div class="crop-controls"><label for="crop-ratio">比例</label><select id="crop-ratio"><option value="free">自由</option><option value="1">1 : 1</option><option value="1.7777778">16 : 9</option><option value="1.3333333">4 : 3</option></select><button id="crop-reset">重置</button></div><div class="crop-coordinates"><label>X<input id="crop-x" type="number" min="0"></label><label>Y<input id="crop-y" type="number" min="0"></label><label>宽<input id="crop-w" type="number" min="1"></label><label>高<input id="crop-h" type="number" min="1"></label><button id="crop-coordinates-apply">应用选区</button></div><p class="hint">拖动选区和边角调整；也可填写坐标和尺寸。原始图片会保留。</p><div class="dialog-actions"><button data-close="crop-dialog">取消</button><button id="crop-save" class="primary">保存裁剪副本</button></div></dialog>

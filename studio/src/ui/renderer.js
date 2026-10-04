@@ -2,6 +2,7 @@ import Vditor from 'vditor';
 import Cropper from 'cropperjs';
 import 'vditor/dist/js/icons/ant.js';
 import { extractImages, replaceImage, imageMarkup, visualMarkdown, restoreVisualImages } from './images.js';
+import { initLayout } from './layout.js';
 
 const $ = id => document.getElementById(id);
 const api = async (method, ...args) => {
@@ -16,6 +17,7 @@ let version = 0, savedVersion = 0, timer, savePromise, selected, cropper, confir
 let mode = 'wysiwyg';
 let lastEditorValue = '';
 const markdownOptions = { sanitize: true, autoSpace: false, fixTermTypo: false, paragraphBeginningSpace: false };
+const layout = initLayout();
 
 function message(text, error = false) {
   $('message').textContent = text;
@@ -37,6 +39,7 @@ function state() {
   $('retry').disabled = busy;
   $('choose-repo').disabled = busy;
   $('mode').disabled = busy || !draft;
+  $('live-preview-toggle').disabled = busy || !draft;
   for (const id of ['image-width', 'image-width-number', 'image-alt', 'apply-width', 'apply-alt', 'clear-image']) $(id).disabled = busy;
   if (busy) $('crop').disabled = true;
   for (const id of [...metadataFields, 'slug']) $(id).disabled = busy || !draft || (id === 'slug' && !!draft.sourceName);
@@ -96,7 +99,7 @@ async function open(id, filename) {
 }
 function viewValue() { return mode === 'wysiwyg' ? visualMarkdown(draft.markdown) : draft.markdown; }
 async function mountEditor() {
-  loading = true; editor?.destroy();
+  loading = true; layout.detachEditor(); editor?.destroy();
   await new Promise((resolve, reject) => {
     const timeout = setTimeout(() => reject(new Error('编辑器加载超时，请重新打开文章。')), 20000);
     editor = new Vditor('editor', {
@@ -107,12 +110,13 @@ async function mountEditor() {
       customWysiwygToolbar: (_type, popover) => {
         popover.querySelectorAll('button[data-type="up"], button[data-type="down"], button[data-type="remove"]').forEach(button => button.remove());
       },
-      preview: { markdown: markdownOptions, math: { engine: 'KaTeX' }, hljs: { enable: true }, actions: [], render: { media: { enable: false } } },
+      preview: { mode: mode === 'sv' && layout.previewVisible ? 'both' : 'editor', delay: 300, markdown: markdownOptions, math: { engine: 'KaTeX' }, hljs: { enable: true }, actions: [], render: { media: { enable: false } } },
       upload: { accept: 'image/png,image/jpeg,image/webp,image/gif', max: 35 * 1024 * 1024, handler: async files => { try { await insertImages(files); return null; } catch (error) { message(error.message, true); return error.message; } } },
       after: () => { clearTimeout(timeout); resolve(); },
       input: value => { if (loading || busy || !draft || value === lastEditorValue) return; draft.markdown = mode === 'wysiwyg' ? restoreVisualImages(value, draft.markdown) : value; styleImages(); lastEditorValue = editor.getValue(); changed(); },
     });
   });
+  layout.attachEditor(editor, mode);
   loading = false; styleImages(); lastEditorValue = editor.getValue();
 }
 function styleImages() {
@@ -270,7 +274,7 @@ $('preview').addEventListener('click', run(preview));
 $('publish').addEventListener('click', run(() => publish('publish')));
 $('withdraw').addEventListener('click', run(() => publish('withdraw')));
 $('confirm-action').addEventListener('click', run(async () => { $('confirm-dialog').close(); const callback = confirmCallback; confirmCallback = null; await callback?.(); }));
-$('choose-repo').addEventListener('click', run(async () => { await flush(); const next = await api('choose-repo'); if (!next) return; editor?.destroy(); editor = null; draft = null; info = next; await refresh(); message('已连接博客项目。'); }));
+$('choose-repo').addEventListener('click', run(async () => { await flush(); const next = await api('choose-repo'); if (!next) return; layout.detachEditor(); editor?.destroy(); editor = null; draft = null; info = next; await refresh(); message('已连接博客项目。'); }));
 $('retry').addEventListener('click', run(async () => {
   await flush(); busy = true; state();
   try { const result = await api('retryPush'); if (draft?.id === result.draft.id) { draft = result.draft; setFields(); } message(result.pushed ? '已推送 GitHub，等待站点部署更新。' : result.message, !result.pushed); await refresh(); }
@@ -278,7 +282,7 @@ $('retry').addEventListener('click', run(async () => {
 }));
 $('export').addEventListener('click', run(async () => { await flush(); if (await api('export', draft.id)) message('已导出 Markdown。图片仍使用博客中的路径。'); }));
 $('delete-draft').addEventListener('click', run(async () => {
-  await flush(); confirm('删除本机草稿', `删除「${draft.metadata.title || '未命名草稿'}」的本机编辑副本？`, { 内容: '只删除草稿文件' }, '已公开文章保留在博客中。', '删除草稿', async () => { await api('remove', draft.id); draft = null; editor?.destroy(); editor = null; selected = null; renderImages(); await refresh(); message('已删除本机草稿。'); });
+  await flush(); confirm('删除本机草稿', `删除「${draft.metadata.title || '未命名草稿'}」的本机编辑副本？`, { 内容: '只删除草稿文件' }, '已公开文章保留在博客中。', '删除草稿', async () => { await api('remove', draft.id); draft = null; layout.detachEditor(); editor?.destroy(); editor = null; selected = null; renderImages(); await refresh(); message('已删除本机草稿。'); });
 }));
 $('insert-image').addEventListener('click', () => $('image-file').click());
 $('image-file').addEventListener('change', run(async () => { await insertImages([...$('image-file').files]); $('image-file').value = ''; }));
