@@ -16,18 +16,18 @@ test('home retains both categories and contact links with the requested labels r
 
 test('home exposes the three latest posts with excerpts taken from their bodies', async () => {
   const html = await page('.');
-  assert.deepEqual(cards(html), ['/posts/markdown-math-guide', '/posts/2026diansai', '/posts/human_vs_dogs']);
+  assert.deepEqual(cards(html), ['/posts/eigen-cpp-guide', '/posts/markdown-math-guide', '/posts/2026-10-03-74215b96']);
   assert.equal([...html.matchAll(/<h3 class="post-card-title"/g)].length, 3);
   assert.equal([...html.matchAll(/class="post-card-desc"/g)].length, 3);
-  assert.ok(html.includes('这次需要用摄像头识别一颗小钢球'));
-  assert.ok(html.includes('前段时间在网上看到这样一个问题'));
+  assert.ok(html.includes('整理 Eigen C++ 库的常用类型与用法'));
+  assert.ok(html.includes('效仿芥川龙之介的《侏儒短记》，记载我的一些想法'));
   assert.ok(html.includes('整理 Markdown 数学公式的常用语法'));
   assert.ok(!html.includes('class="glass-pill pinned"'));
 });
 
 test('all category listings keep existing content and order', async () => {
-  assert.deepEqual(cards(await page('tech')), ['/posts/test', '/posts/markdown-math-guide', '/posts/2026diansai']);
-  assert.deepEqual(cards(await page('life')), ['/posts/human_vs_dogs', '/posts/亿万人', '/posts/about_me']);
+  assert.deepEqual(cards(await page('tech')), ['/posts/test', '/posts/eigen-cpp-guide', '/posts/markdown-math-guide', '/posts/2026diansai']);
+  assert.deepEqual(cards(await page('life')), ['/posts/2026-10-03-74215b96', '/posts/亿万人', '/posts/about_me']);
 });
 
 test('listings preserve written summaries and fill missing ones with author wording', async () => {
@@ -36,7 +36,7 @@ test('listings preserve written summaries and fill missing ones with author word
   assert.ok(html.includes('这次需要用摄像头识别一颗小钢球'));
   assert.ok(html.includes('This is the first post of my new Astro blog.'));
   assert.ok(html.includes('href="/posts/2026diansai"'));
-  assert.equal([...html.matchAll(/class="post-card-desc"/g)].length, 3);
+  assert.equal([...html.matchAll(/class="post-card-desc"/g)].length, 4);
   assert.ok(!html.includes('class="post-card-author"'));
   const life = await page('life');
   assert.equal([...life.matchAll(/class="post-card-desc"/g)].length, 3);
@@ -45,7 +45,7 @@ test('listings preserve written summaries and fill missing ones with author word
 });
 
 test('long articles have working section targets, short articles omit the table of contents', async () => {
-  for (const path of ['posts/2026diansai', 'posts/test', 'posts/markdown-math-guide']) {
+  for (const path of ['posts/2026diansai', 'posts/test', 'posts/markdown-math-guide', 'posts/eigen-cpp-guide']) {
     const html = await page(path);
     const toc = html.match(/<aside class="article-toc"[\s\S]*?<\/aside>/)?.[0];
     assert.ok(toc, path);
@@ -53,14 +53,15 @@ test('long articles have working section targets, short articles omit the table 
     assert.ok(links.length >= 3, path);
     for (const [, slug] of links) assert.ok(html.includes(`id="${slug}"`), slug);
   }
-  assert.ok(!(await page('posts/human_vs_dogs')).includes('<aside class="article-toc"'));
+  assert.ok(!(await page('posts/亿万人')).includes('<aside class="article-toc"'));
 });
 
 test('article navigation links to chronological siblings within its category', async () => {
   const links = html => [...(html.match(/<nav class="post-navigation"[\s\S]*?<\/nav>/)?.[0] || '').matchAll(/href="([^"]+)"/g)].map(match => decodeURI(match[1]));
   assert.deepEqual(links(await page('posts/test')), ['/posts/2026diansai']);
   assert.deepEqual(links(await page('posts/2026diansai')), ['/posts/test', '/posts/markdown-math-guide']);
-  assert.deepEqual(links(await page('posts/markdown-math-guide')), ['/posts/2026diansai']);
+  assert.deepEqual(links(await page('posts/markdown-math-guide')), ['/posts/2026diansai', '/posts/eigen-cpp-guide']);
+  assert.deepEqual(links(await page('posts/eigen-cpp-guide')), ['/posts/markdown-math-guide']);
   const life = links(await page('posts/about_me'));
   assert.equal(life.length, 1);
   assert.ok(life.every(url => !url.includes('2026diansai') && !url.includes('3DV_L_1')));
