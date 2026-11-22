@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { themeStorageKey } from '../scripts/theme';
 import '../styles/global.css';
 
 interface Props {
@@ -27,6 +28,15 @@ const {
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={pageDescription} />
     <meta name="generator" content={Astro.generator} />
+    <script is:inline define:vars={{ themeStorageKey }}>
+      try {
+        if (localStorage.getItem(themeStorageKey) === 'dark') {
+          document.documentElement.dataset.theme = 'dark';
+        }
+      } catch {
+        // The page keeps its default theme when storage is unavailable.
+      }
+    </script>
     <title>{pageTitle} - 丁焕</title>
 
   </head>

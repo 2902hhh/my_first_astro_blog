@@ -1,6 +1,7 @@
 ---
 import Menu from './Menu.astro';
 import Navigation from './Navigation.astro';
+import PullCord from './PullCord.astro';
 
 interface Props {
   activeCategory?: 'tech' | 'life';
@@ -12,7 +13,10 @@ const { activeCategory } = Astro.props;
 <header class="site-header">
   <nav aria-label="主导航">
     <a class="site-brand" href="/">丁焕</a>
-    <Menu />
-    <Navigation activeCategory={activeCategory} />
+    <div class="nav-actions">
+      <Menu />
+      <Navigation activeCategory={activeCategory} />
+      <PullCord />
+    </div>
   </nav>
 </header>

@@ -1,0 +1,57 @@
+<button class="pull-cord" type="button" role="switch" aria-checked="false" title="下拉绳子或点击切换深色模式" data-pull-cord hidden>
+  <svg viewBox="0 0 300 455" aria-hidden="true" focusable="false">
+    <path class="wire" data-wire d="M150 0V122" />
+    <g data-lamp transform="translate(150 122)">
+      <circle class="bulb" data-bulb cx="0" cy="63" r="23" />
+      <path class="shade" d="M-65 51Q-58 0 0 0T65 51Q67 57 60 57H-60Q-67 57 -65 51Z" />
+    </g>
+    <path class="rope" data-rope d="M184 185V293" />
+    <g data-bead transform="translate(184 293)">
+      <rect x="-19" y="-7" width="38" height="54" rx="15" />
+    </g>
+  </svg>
+  <span>深色模式</span>
+</button>
+
+<style>
+  .pull-cord {
+    /* Pull Cord's component-specific stiffness and damping. */
+    --cord-swing: 46 3;
+    --cord-tug: 300 13;
+    --cord-stretch: 300 17;
+    --cord-tap: 210 22;
+    --cord-bulb: 420 13;
+    --cord-light-on: 120 21;
+    --cord-light-off: 170 27;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    height: var(--header-height);
+    padding: 0 4px 0 0;
+    border: 0;
+    border-radius: var(--glass-radius-sm);
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+    white-space: nowrap;
+    touch-action: none;
+    user-select: none;
+    cursor: grab;
+  }
+  .pull-cord[hidden] { display: none; }
+  .pull-cord:hover,
+  .pull-cord[aria-checked='true'] { color: var(--color-accent); }
+  .pull-cord:active { cursor: grabbing; }
+  .pull-cord:focus-visible { outline-offset: -4px; border-radius: var(--glass-radius-sm); }
+  svg { display: block; width: 50px; height: 100%; flex: none; }
+  .wire, .rope { fill: none; stroke: currentColor; stroke-width: 8; stroke-linecap: round; }
+  .shade { fill: var(--color-accent); }
+  .bulb { fill: var(--aurora-violet); }
+  [aria-checked='true'] .bulb { fill: var(--color-bg-alt); }
+  [data-bead] { fill: currentColor; }
+</style>
+
+<script>
+  import { mountPullCord } from '../scripts/pull-cord';
+  document.querySelectorAll<HTMLButtonElement>('[data-pull-cord]').forEach(mountPullCord);
+</script>

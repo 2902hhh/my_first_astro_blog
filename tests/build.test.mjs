@@ -14,28 +14,30 @@ test('home retains both categories and contact links with the requested labels r
   assert.ok(!html.includes('学习与生活的记录'));
 });
 
-test('home exposes the three latest posts with excerpts taken from their bodies', async () => {
+test('home exposes the three latest posts with their summaries', async () => {
   const html = await page('.');
-  assert.deepEqual(cards(html), ['/posts/eigen-cpp-guide', '/posts/markdown-math-guide', '/posts/2026-10-03-74215b96']);
+  assert.deepEqual(cards(html), ['/posts/2026-11-22-798df552', '/posts/2026-11-22-c46e1890', '/posts/eigen-cpp-guide']);
   assert.equal([...html.matchAll(/<h3 class="post-card-title"/g)].length, 3);
   assert.equal([...html.matchAll(/class="post-card-desc"/g)].length, 3);
   assert.ok(html.includes('整理 Eigen C++ 库的常用类型与用法'));
-  assert.ok(html.includes('效仿芥川龙之介的《侏儒短记》，记载我的一些想法'));
-  assert.ok(html.includes('整理 Markdown 数学公式的常用语法'));
+  assert.ok(html.includes('cs106l lecture6'));
+  assert.ok(html.includes('cs106l lecture5'));
   assert.ok(!html.includes('class="glass-pill pinned"'));
 });
 
 test('all category listings keep existing content and order', async () => {
-  assert.deepEqual(cards(await page('tech')), ['/posts/test', '/posts/eigen-cpp-guide', '/posts/markdown-math-guide', '/posts/2026diansai']);
+  assert.deepEqual(cards(await page('tech')), ['/posts/test', '/posts/2026-11-22-798df552', '/posts/2026-11-22-c46e1890', '/posts/eigen-cpp-guide']);
+  assert.deepEqual(cards(await page('tech/2')), ['/posts/markdown-math-guide', '/posts/2026diansai']);
   assert.deepEqual(cards(await page('life')), ['/posts/2026-10-03-74215b96', '/posts/亿万人', '/posts/about_me']);
 });
 
 test('listings preserve written summaries and fill missing ones with author wording', async () => {
   const html = await page('tech');
-  assert.ok(html.includes('2026电赛H题视觉记录'));
-  assert.ok(html.includes('这次需要用摄像头识别一颗小钢球'));
+  const older = await page('tech/2');
+  assert.ok(older.includes('2026电赛H题视觉记录'));
+  assert.ok(older.includes('这次需要用摄像头识别一颗小钢球'));
   assert.ok(html.includes('This is the first post of my new Astro blog.'));
-  assert.ok(html.includes('href="/posts/2026diansai"'));
+  assert.ok(older.includes('href="/posts/2026diansai"'));
   assert.equal([...html.matchAll(/class="post-card-desc"/g)].length, 4);
   assert.ok(!html.includes('class="post-card-author"'));
   const life = await page('life');
@@ -61,7 +63,7 @@ test('article navigation links to chronological siblings within its category', a
   assert.deepEqual(links(await page('posts/test')), ['/posts/2026diansai']);
   assert.deepEqual(links(await page('posts/2026diansai')), ['/posts/test', '/posts/markdown-math-guide']);
   assert.deepEqual(links(await page('posts/markdown-math-guide')), ['/posts/2026diansai', '/posts/eigen-cpp-guide']);
-  assert.deepEqual(links(await page('posts/eigen-cpp-guide')), ['/posts/markdown-math-guide']);
+  assert.deepEqual(links(await page('posts/eigen-cpp-guide')), ['/posts/markdown-math-guide', '/posts/2026-11-22-c46e1890']);
   const life = links(await page('posts/about_me'));
   assert.equal(life.length, 1);
   assert.ok(life.every(url => !url.includes('2026diansai') && !url.includes('3DV_L_1')));
