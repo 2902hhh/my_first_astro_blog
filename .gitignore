@@ -26,3 +26,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Local Obsidian appearance and layout
+/.obsidian/appearance.json
+/.obsidian/workspace.json
