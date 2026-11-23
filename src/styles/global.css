@@ -56,7 +56,6 @@
   --quote-border: #aba7e2;
   --selection-bg: #dce0ff;
   --accent-ink: #fff;
-  --avatar-ring: rgba(255,255,255,.8);
   color-scheme: light;
 }
 :root[data-theme='dark'] {
@@ -94,7 +93,6 @@
   --quote-border: #8b86ce;
   --selection-bg: #42476f;
   --accent-ink: #20243a;
-  --avatar-ring: #687393;
   color-scheme: dark;
 }
 /* The light viewport opens and closes around the bulb. */
@@ -143,12 +141,8 @@ main { flex: 1; width: min(var(--content-wide), calc(100% - 64px)); margin: 0 au
 main:focus { outline: none; }
 .home-layout { display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1.65fr); gap: 56px; align-items: start; padding: 48px 0 56px; }
 .home-profile { min-width: 0; padding-right: 32px; border-right: 1px solid var(--color-separator); }
-.hero { padding: 0 0 32px; display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
-.hero-avatar { width: 104px; height: 104px; object-fit: cover; border-radius: 50%; border: 5px solid var(--avatar-ring); box-shadow: 0 8px 40px rgba(83,73,148,.12); margin-bottom: 24px; }
+.hero { padding: 0 0 24px; min-width: 0; }
 .eyebrow { display: block; font-size: 12px; letter-spacing: .15em; font-weight: 550; color: var(--color-text-secondary); }
-.hero .eyebrow { font-size: 14px; font-weight: 400; letter-spacing: normal; }
-.hero-name { font-size: clamp(44px, 6vw, 56px); margin: 10px 0 14px; letter-spacing: .06em; }
-.hero-intro { font-size: 16px; color: var(--color-text-secondary); line-height: 1.8; }
 .blog-grid { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--color-separator); margin: 0; width: 100%; }
 .category-link { padding: 20px 0; color: var(--color-text); }
 .category-link, .post-card-link { position: relative; isolation: isolate; }
@@ -343,11 +337,6 @@ a.glass-pill:hover { background: var(--surface-hover); }
 }
 @media (max-width: 600px) {
   .home-profile { grid-template-columns: minmax(0,1fr); gap: 24px; }
-  .hero { flex-direction: row; align-items: center; gap: 20px; }
-  .hero-avatar { width: 80px; height: 80px; margin: 0; flex-shrink: 0; border-width: 3px; }
-  .hero-text { min-width: 0; }
-  .hero-name { font-size: 36px; margin: 6px 0 8px; }
-  .hero-intro { font-size: 14px; }
   .blog-grid { grid-template-columns: minmax(0,1fr) minmax(0,1fr); border-top: 1px solid var(--color-separator); padding-top: 20px; }
   .category-link, .category-link:first-child { padding: 8px 16px 8px 0; }
   .category-link + .category-link { border-top: 0; border-left: 1px solid var(--color-separator); padding-left: 16px; padding-right: 0; }

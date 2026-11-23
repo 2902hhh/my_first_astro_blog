@@ -1,6 +1,6 @@
 import { applyTheme, currentTheme, saveTheme, themeStorageKey } from './theme';
+import { reset, step, type Spring } from './spring';
 
-type Spring = { value: number; velocity: number; target: number; stiffness: number; damping: number };
 type Point = { x: number; y: number };
 type RopePoint = Point & { vx: number; vy: number };
 type Drag = { id: number; from: Point; bead: Point; scale: number; moved: boolean };
@@ -12,17 +12,6 @@ const ROPE_LENGTH = LINKS * LINK_LENGTH;
 const MAX_STRETCH = 54;
 const TOGGLE_STRETCH = 22;
 const clamp = (n: number, low: number, high: number) => Math.min(Math.max(n, low), high);
-
-function step(spring: Spring, dt: number) {
-  const force = spring.stiffness * (spring.target - spring.value) - spring.damping * spring.velocity;
-  spring.velocity += force * dt;
-  spring.value += spring.velocity * dt;
-}
-
-function reset(spring: Spring, value: number) {
-  spring.value = spring.target = value;
-  spring.velocity = 0;
-}
 
 export function mountPullCord(button: HTMLButtonElement) {
   const svg = button.querySelector('svg')!;
